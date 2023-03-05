@@ -1,21 +1,18 @@
 package com.lib.dto;
 
-<<<<<<<<< Temporary merge branch 1
 
-=========
 import com.lib.domain.ImageFile;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
->>>>>>>>> Temporary merge branch 2
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-<<<<<<<<< Temporary merge branch 1
-=========
 
->>>>>>>>> Temporary merge branch 2
+import java.time.LocalDateTime;
+
 
 
 @Getter
@@ -24,8 +21,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BookDTO {
 
-<<<<<<<<< Temporary merge branch 1
-=========
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -51,5 +46,5 @@ public class BookDTO {
 
     private LocalDateTime createDate;
     private boolean builtIn;
->>>>>>>>> Temporary merge branch 2
+
 }
