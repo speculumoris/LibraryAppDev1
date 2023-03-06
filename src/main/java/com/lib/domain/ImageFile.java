@@ -1,9 +1,6 @@
 package com.lib.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,16 +15,27 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "t_imagefile")
 public class ImageFile {
 
-
-
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name="uuid", strategy = "uuid2")
     private String id;
 
+    private String name;
 
+    private String type;
 
+    private long length;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private ImageData imageData;
+
+    public ImageFile(String name, String type, ImageData imageData){
+
+        this.name = name;
+        this.type = type;
+        this.imageData = imageData;
+        this.length = imageData.getData().length;
+    }
 
 
 }
