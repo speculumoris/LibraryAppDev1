@@ -1,5 +1,6 @@
 package com.lib.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -27,6 +28,7 @@ public class Author {
 
     private boolean builtIn =false;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "author")
     private List<Book> bookList;
 

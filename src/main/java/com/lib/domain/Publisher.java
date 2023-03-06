@@ -1,5 +1,6 @@
 package com.lib.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -31,6 +32,7 @@ public class Publisher {
 
     private Boolean builtIn = false;
 
+    @JsonIgnore
     @OneToMany
     private List<Book> bookList;
 

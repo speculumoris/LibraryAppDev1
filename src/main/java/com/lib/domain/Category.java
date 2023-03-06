@@ -1,5 +1,6 @@
 package com.lib.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -32,6 +33,7 @@ public class Category {
     @Size(min = 4,max = 70,message = "Author name '${validateValue}' should be between {min} and {max}")
     private int sequence;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category")
     private List<Book> bookList;
 
