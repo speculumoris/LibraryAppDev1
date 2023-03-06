@@ -33,6 +33,7 @@ public class Category {
     private int sequence;
 
     @OneToMany(mappedBy = "category")
+
     private List<Book> bookList;
 
 
