@@ -68,6 +68,10 @@ public class Book {
 
     private boolean builtIn =false;
 
+    @ManyToOne
+    private Category category;
+
+
 
 
 
