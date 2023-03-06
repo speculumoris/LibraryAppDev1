@@ -32,7 +32,7 @@ public class Category {
     @Size(min = 4,max = 70,message = "Author name '${validateValue}' should be between {min} and {max}")
     private int sequence;
 
-    @OneToMany
+    @OneToMany(mappedBy = "category")
     private List<Book> bookList;
 
 

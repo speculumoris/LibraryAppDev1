@@ -71,6 +71,12 @@ public class Book {
     @ManyToOne
     private Category category;
 
+    @ManyToOne
+    private Publisher publisher;
+
+    @ManyToOne
+    private Author author;
+
 
 
 
