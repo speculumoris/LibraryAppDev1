@@ -34,4 +34,8 @@ public class Publisher {
     @OneToMany
     private List<Book> bookList;
 
+
+
+
+
 }
