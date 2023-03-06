@@ -2,9 +2,9 @@ package com.lib.dto;
 
 
 import com.lib.domain.ImageFile;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
