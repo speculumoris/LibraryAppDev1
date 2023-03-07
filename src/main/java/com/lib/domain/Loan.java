@@ -22,10 +22,6 @@ public class Loan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
-    private Long userId;
-    @NotNull
-    private Long bookId;
 
     private LocalDateTime loanDate;
     private LocalDateTime expireDate;

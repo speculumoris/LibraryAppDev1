@@ -33,10 +33,7 @@ public class Category {
     @Size(min = 4,max = 70,message = "Author name '${validateValue}' should be between {min} and {max}")
     private int sequence;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "category")
 
-    private List<Book> bookList;
 
 
     public Category(String name, boolean builtIn, int sequence) {

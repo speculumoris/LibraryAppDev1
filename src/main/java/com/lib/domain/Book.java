@@ -37,20 +37,15 @@ public class Book {
 
     @Column(nullable = false)
     private Integer pageCount;
-    @NotNull(message = "Author cannot be null")
-    private Long authorId;
-    @NotNull(message = "Publisher cannot be null")
-    private Long publisherId;
+
 
     @Pattern(regexp = "^\\d{4}$", message = "please enter : yyyy" )
     @Column(nullable = false)
     private Integer publishDate;
-    @NotNull(message = "CategoryId cannot be null")
-    private Long categoryId;
 
     @Pattern(regexp = "^\\s{2}-\\d{3}$")
     @OneToMany(orphanRemoval = true)
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book__id")
     private List<ImageFile> imageFile;
 
 

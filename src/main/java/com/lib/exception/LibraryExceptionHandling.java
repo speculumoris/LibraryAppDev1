@@ -113,8 +113,7 @@ public class LibraryExceptionHandling extends ResponseEntityExceptionHandler {
                                                                   HttpStatusCode status,
                                                                   WebRequest request) {
 
-        ApiResponseError error = new ApiResponseError(HttpStatus.INTERNAL_SERVER_ERROR
-                ,
+        ApiResponseError error = new ApiResponseError(HttpStatus.INTERNAL_SERVER_ERROR,
                 ex.getMessage(),
                 request.getDescription(false))  ;
         return buildResponseEntity(error);
