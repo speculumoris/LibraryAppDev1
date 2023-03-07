@@ -1,10 +1,10 @@
 package com.lib.dto.request;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +14,7 @@ import lombok.Setter;
 @Getter@Setter
 @NoArgsConstructor
 public class BookRequest {
+
 
     @NotNull(message = "Book name cannot be null")
     @Size(min = 2,max = 80,message = "Book name '${validateValue}' should be between {min} and {max}")

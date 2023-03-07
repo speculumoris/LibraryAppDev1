@@ -3,7 +3,44 @@ package com.lib.dto.response;
 public class ResponseMessage {
 
 
-    public static final String BOOK_SAVED_RESPONSE_MESSAGE = "Book Successfully Saved";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public final static String USER_CREATED_RESPONSE = "User succsessfully created";
+
+
+
+
+
+    public final static String USER_UPDATE_RESPONSE_MESSAGE = "User succsessfully updated";
+    public final static String USER_DELETE_RESPONSE_MESSAGE = "User succsessfully deleted";
 
 
 
