@@ -45,7 +45,7 @@ public class Book {
     @Pattern(regexp = "^\\s{2}-\\d{3}$")
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "book_id")
-    private List<ImageFile> imageFile;
+    private ImageFile imageFile;
 
 
     @NotNull(message = "ShelfCode cannot be null")
