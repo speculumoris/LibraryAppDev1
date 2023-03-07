@@ -5,6 +5,7 @@ import com.lib.domain.User;
 import com.lib.domain.enums.RoleType;
 import com.lib.dto.UserDTO;
 import com.lib.dto.request.AdminCreateByUserRequest;
+import com.lib.dto.request.UserUpdateRequest;
 import com.lib.exception.ConflictException;
 import com.lib.exception.ResourceNotFoundException;
 import com.lib.exception.message.ErrorMessage;
@@ -107,6 +108,16 @@ public class UserService {
         }
         return roles;
     }
+
+
+    public void updateUser(Long id, UserUpdateRequest userUpdateRequest) {
+
+
+
+
+
+    }
+
 
 
 

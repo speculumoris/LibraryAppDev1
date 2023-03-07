@@ -3,6 +3,7 @@ package com.lib.controller;
 import com.lib.domain.User;
 import com.lib.dto.UserDTO;
 import com.lib.dto.request.AdminCreateByUserRequest;
+import com.lib.dto.request.UserUpdateRequest;
 import com.lib.dto.response.LibResponse;
 import com.lib.dto.response.ResponseMessage;
 import com.lib.service.UserService;
@@ -68,8 +69,17 @@ public class UserController {
 
     @PutMapping("/users/{id}")
     //   @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
-    public ResponseEntity<LibResponse> updateUser(@PathVariable Long id){
+    public ResponseEntity<LibResponse> updateUser(@PathVariable Long id,
+                                                  @Valid @RequestBody UserUpdateRequest userUpdateRequest){
 
+
+        userService.updateUser(id, userUpdateRequest);
+
+        LibResponse response = new LibResponse();
+        response.setMessage(ResponseMessage.USER_UPDATE_RESPONSE_MESSAGE);
+        response.setSuccess(true);
+
+        return ResponseEntity.ok(response);
 
 
 

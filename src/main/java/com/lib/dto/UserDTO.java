@@ -31,7 +31,7 @@ public class UserDTO {
     private String email;
     private String password;
 
-    private LocalDateTime createDate;
+    private LocalDateTime createDate = LocalDateTime.now();
 
     private String resetPasswordCode;
 
