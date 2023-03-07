@@ -12,7 +12,7 @@ public interface ImageFileRepository extends JpaRepository<ImageFile,String> {
 
 
     @EntityGraph(attributePaths = "id")
-    Optional<Object> findImageById(String imageId);
+    Optional<ImageFile> findImageById(String imageId);
 
 
 

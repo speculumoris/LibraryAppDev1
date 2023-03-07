@@ -1,6 +1,7 @@
 package com.lib.service;
 
 import com.lib.domain.Book;
+import com.lib.domain.ImageFile;
 import com.lib.dto.BookDTO;
 import com.lib.mapper.BookMapper;
 import com.lib.repository.BookRepository;
@@ -26,7 +27,7 @@ public class BookService {
 
     public void saveBook(String imageId, BookDTO bookDTO) {
 
-        ImageFileService imageFile = imageFileService.findImageById(imageId);
+        ImageFile imageFile = imageFileService.findImageById(imageId);
 
 
     }
