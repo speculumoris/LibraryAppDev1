@@ -9,6 +9,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
@@ -35,15 +36,18 @@ public class UserDTO {
 
     private String resetPasswordCode;
 
-    private boolean builtIn;
+    private Boolean builtIn;
 
     private Set<String> roles;
 
-    public void setRole(Set<Role> roles){
-        Set<String> rolSet=new HashSet<>();
-        roles.forEach(str->{
-            rolSet.add(str.getRoleType().getName());
+    public void setRoles(Set<Role> roles){
+        Set<String> roleStr = new HashSet<>();
+        roles.forEach(r->{
+            roleStr.add(r.getRoleType().getName()); // Customer , Administrator
         });
+
+        this.roles = roleStr;
     }
+
 
 }

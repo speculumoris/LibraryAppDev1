@@ -6,6 +6,7 @@ import com.lib.domain.enums.RoleType;
 import com.lib.dto.UserDTO;
 import com.lib.dto.request.AdminCreateByUserRequest;
 import com.lib.dto.request.UserUpdateRequest;
+import com.lib.exception.BadRequestException;
 import com.lib.exception.ConflictException;
 import com.lib.exception.ResourceNotFoundException;
 import com.lib.exception.message.ErrorMessage;
@@ -29,7 +30,6 @@ public class UserService {
     public UserService(UserRepository userRepository, RoleService roleService, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.roleService = roleService;
-
         this.userMapper = userMapper;
     }
 
@@ -38,10 +38,15 @@ public class UserService {
 
         Page<User> usersPage = userRepository.findAll(pageable);
 
-        return usersPage.map(userMapper::userToUserDTO);
-
+        return getUserDTOPage(usersPage);
     }
 
+
+    private Page<UserDTO> getUserDTOPage(Page<User> userPage){
+        return userPage.map(
+                user -> userMapper.userToUserDTO(user)
+        );
+    }
 
     public UserDTO getUserById(Long id) {
        User user = userRepository.findById(id).orElseThrow(()->
@@ -55,7 +60,7 @@ public class UserService {
     public void UserCreatedByAdmin( AdminCreateByUserRequest request) {
 
         User user = new User();
-        boolean exists = userRepository.existsByEmail();
+        boolean exists = userRepository.existsByEmail(request.getEmail());
 
         if(exists){
             throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE, request.getEmail()));
@@ -85,6 +90,61 @@ public class UserService {
 
     }
 
+
+
+    public void updateUser(Long id, UserUpdateRequest userUpdateRequest) {
+
+        User user = getById(id);
+
+        // builtIn control
+        if(user.isBuiltIn()){
+            throw new BadRequestException(ErrorMessage.NOT_PERMITTED_METHOD_MESSAGE);
+        }
+
+        // email control
+        boolean emailExist = userRepository.existsByEmail(userUpdateRequest.getEmail());
+
+        if(emailExist && !userUpdateRequest.getEmail().equals(user.getEmail())){
+            throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE,
+                    userUpdateRequest.getEmail()));
+        }
+
+
+        // password control
+        if(userUpdateRequest.getPassword() == null){
+            userUpdateRequest.setPassword(user.getPassword());
+        }else{
+//            String encodedPassword = passwordEncoder.encode(userUpdateRequest.getPassword());
+//            userUpdateRequest.setPassword(encodedPassword);
+        }
+
+
+        //Rol kontrol
+        Set<String> userStrRoles = userUpdateRequest.getRoles();
+        Set<Role> roles = convertRoles(userStrRoles);
+
+        // CURRENT OLAN ADMIN MI EMPLOYEE MI ????????
+
+        // ADMIN ISE  TUM KULLANICILARI UPDATE EDER   EMPLOYEE ISE SADECE MEMBER'I UPDATE EDER
+
+
+
+
+
+
+    }
+
+
+
+    public User getById(Long id){
+
+       User user = userRepository.findById(id).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION, id)));
+       return user;
+    }
+
+
+
     // Request den gelen String rolleri ROLE_TYPE cevirme
     private Set<Role> convertRoles(Set<String> pRoles){
         Set<Role> roles = new HashSet<>();
@@ -110,15 +170,16 @@ public class UserService {
     }
 
 
-    public void updateUser(Long id, UserUpdateRequest userUpdateRequest) {
+    public void deleteUser(Long id) {
+        User user = getById(id);
+
+        boolean builtIn = user.isBuiltIn();
 
 
 
 
-
+        userRepository.delete(user);
     }
-
-
 
 
 }

@@ -1,6 +1,5 @@
 package com.lib.controller;
 
-import com.lib.domain.User;
 import com.lib.dto.UserDTO;
 import com.lib.dto.request.AdminCreateByUserRequest;
 import com.lib.dto.request.UserUpdateRequest;
@@ -18,13 +17,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user" )
 public class UserController {
-
     private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
 
 
     @GetMapping("/auth/pages")
@@ -40,7 +37,6 @@ public class UserController {
         Page<UserDTO> userDTOPage = userService.getUserPage(pageable);
 
         return ResponseEntity.ok(userDTOPage);
-
     }
 
 
@@ -63,7 +59,6 @@ public class UserController {
         LibResponse response = new LibResponse(ResponseMessage.USER_CREATED_RESPONSE, true);
 
         return ResponseEntity.ok(response);
-
     }
 
 
@@ -72,7 +67,6 @@ public class UserController {
     public ResponseEntity<LibResponse> updateUser(@PathVariable Long id,
                                                   @Valid @RequestBody UserUpdateRequest userUpdateRequest){
 
-
         userService.updateUser(id, userUpdateRequest);
 
         LibResponse response = new LibResponse();
@@ -80,10 +74,25 @@ public class UserController {
         response.setSuccess(true);
 
         return ResponseEntity.ok(response);
-
-
-
     }
+
+
+    @DeleteMapping("/users/{id}")
+    //   @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<LibResponse> deleteUser(@PathVariable Long id){
+
+        userService.deleteUser(id);
+
+        LibResponse response = new LibResponse();
+        response.setMessage(ResponseMessage.USER_DELETE_RESPONSE_MESSAGE);
+        response.setSuccess(true);
+
+        return ResponseEntity.ok(response);
+    }
+
+
+    /// authenticated user  currentUser methodu yazilacak
+
 
 
 

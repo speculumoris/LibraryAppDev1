@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 
 @Getter
@@ -41,11 +42,12 @@ public class UserUpdateRequest {
     @Column(nullable = false)
     private LocalDate birthDate;
 
+    @NotNull(message = "password cannot be null")
+    private String password;
     @Email(message = "please provide valid email")
-    @NotNull(message = "email cannot be null")
     private String email;
 
-
+    private Set<String> roles ;
 
 
 
