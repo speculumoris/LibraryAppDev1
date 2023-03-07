@@ -1,25 +1,20 @@
 package com.lib.exception;
 
-
 import com.lib.exception.message.ApiResponseError;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.ConversionNotSupportedException;
-import org.springframework.beans.TypeMismatchException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.slf4j.*;
+import org.springframework.beans.*;
+import org.springframework.http.*;
+import org.springframework.http.converter.*;
+
+import org.springframework.web.bind.*;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.*;
+import org.springframework.web.servlet.mvc.method.annotation.*;
 
 import javax.security.sasl.AuthenticationException;
-import java.nio.file.AccessDeniedException;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.nio.file.*;
+import java.util.*;
+import java.util.stream.*;
 
 @ControllerAdvice
 public class LibraryExceptionHandling extends ResponseEntityExceptionHandler {
@@ -96,25 +91,32 @@ public class LibraryExceptionHandling extends ResponseEntityExceptionHandler {
                 errors.get(0).toString(),
                 request.getDescription(false))  ;
         return buildResponseEntity(error);
+
     }
+
 
     @Override
     protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
 
         ApiResponseError error = new ApiResponseError(HttpStatus.BAD_REQUEST,
                 ex.getMessage(),
                 request.getDescription(false))  ;
         return buildResponseEntity(error);
+
     }
+
 
     @Override
     protected ResponseEntity<Object> handleConversionNotSupported(ConversionNotSupportedException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
 
         ApiResponseError error = new ApiResponseError(HttpStatus.INTERNAL_SERVER_ERROR
                 ,
                 ex.getMessage(),
                 request.getDescription(false))  ;
         return buildResponseEntity(error);
+
     }
 
     @Override
@@ -124,8 +126,8 @@ public class LibraryExceptionHandling extends ResponseEntityExceptionHandler {
                 ex.getMessage(),
                 request.getDescription(false))  ;
         return buildResponseEntity(error);
-    }
 
+    }
 
 
     @ExceptionHandler(RuntimeException.class)
