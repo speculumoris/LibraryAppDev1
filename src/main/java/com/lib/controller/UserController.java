@@ -66,6 +66,16 @@ public class UserController {
     }
 
 
+    @PutMapping("/users/{id}")
+    //   @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
+    public ResponseEntity<LibResponse> updateUser(@PathVariable Long id){
+
+
+
+
+    }
+
+
 
 
 

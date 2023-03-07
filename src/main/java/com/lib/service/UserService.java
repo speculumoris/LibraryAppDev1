@@ -51,8 +51,9 @@ public class UserService {
     }
 
 
-    public void UserCreatedByAdmin(User user, AdminCreateByUserRequest request) {
+    public void UserCreatedByAdmin( AdminCreateByUserRequest request) {
 
+        User user = new User();
         boolean exists = userRepository.existsByEmail();
 
         if(exists){
@@ -71,6 +72,10 @@ public class UserService {
         user.setEmail(request.getEmail());
 
         Set<String> userStrRole = request.getRoles();
+
+        /// SECURITY OLUSTURULUNCA ADMIN VE EMPO
+
+
         Set<Role> roles = convertRoles(userStrRole);
 
         user.setRoles(roles);

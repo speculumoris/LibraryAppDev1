@@ -58,7 +58,7 @@ public class User {
     @NotNull(message = "password cannot be null")
     private String password;
 
-    private LocalDateTime createDate;
+    private LocalDateTime createDate ;
 
     @Column(nullable = false)
     private String resetPasswordCode;
