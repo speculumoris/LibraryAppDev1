@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,6 +16,9 @@ public interface ImageFileRepository extends JpaRepository<ImageFile,String> {
     Optional<ImageFile> findImageById(String imageId);
 
 
+
+    @EntityGraph(attributePaths = "id") // id fieldının seviyesindeki datalar gelsin bana diyorum
+    List<ImageFile> findAll();
 
 
 }

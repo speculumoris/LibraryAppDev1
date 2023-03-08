@@ -3,11 +3,15 @@ package com.lib.service;
 import com.lib.domain.Book;
 import com.lib.domain.ImageFile;
 import com.lib.dto.BookDTO;
+import com.lib.exception.ConflictException;
+import com.lib.exception.message.ErrorMessage;
 import com.lib.mapper.BookMapper;
 import com.lib.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class BookService {
@@ -29,6 +33,18 @@ public class BookService {
 
         ImageFile imageFile = imageFileService.findImageById(imageId);
 
+        Integer usedBookCount = bookRepository.findBookCountByImageId(imageFile.getId());
+        if (usedBookCount > 0) {
+            throw new ConflictException(ErrorMessage.IMAGE_USED_MESSAGE);
+        }
+
+        Book book = bookMapper.bookDTOToBook(bookDTO);
+
+        Set<ImageFile> imFiles = new HashSet<>();
+        imFiles.add(imageFile);
+//        book.setImageFile(imFiles);
+
+        bookRepository.save(book);
 
     }
 
