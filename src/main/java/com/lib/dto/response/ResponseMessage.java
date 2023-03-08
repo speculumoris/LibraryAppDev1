@@ -3,6 +3,7 @@ package com.lib.dto.response;
 public class ResponseMessage {
 
 
+    public final static String LOAN_CREATED_RESPONSE = "Loan succsessfully created";
 
 
 

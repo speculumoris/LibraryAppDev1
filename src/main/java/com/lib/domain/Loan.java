@@ -2,15 +2,17 @@ package com.lib.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,8 +28,7 @@ public class Loan {
     private Long id;
 
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy HH:mm:ss")
-    @NotNull(message="Please provide loan date of the book")
-    private LocalDateTime loanDate;
+    private LocalDateTime loanDate=LocalDateTime.now();
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy HH:mm:ss")
     @NotNull(message="Please provide expire date of the book")
     private LocalDateTime expireDate;
@@ -41,11 +42,10 @@ public class Loan {
     @Size(max = 300)
     private String notes;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "book_id",referencedColumnName = "id")
     private Book book;
-
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     private User user;
 

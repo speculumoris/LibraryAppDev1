@@ -23,8 +23,6 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-
     @NotNull(message = "Book name cannot be null")
     @Size(min = 2,max = 80,message = "Book name '${validateValue}' should be between {min} and {max}")
     private String name;
@@ -47,21 +45,17 @@ public class Book {
     @JoinColumn(name = "book__id")
     private List<ImageFile> imageFile;
 
-
     @NotNull(message = "ShelfCode cannot be null")
     @Column(length = 6)
     private String shelfCode;
 
-
     private boolean active=true;
     private boolean featured=false;
+    private boolean loanable=true;
 
     @NotNull
     private LocalDateTime createDate;
-
-
     private boolean builtIn =false;
-
     @ManyToOne
     private Category category;
 

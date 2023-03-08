@@ -6,6 +6,10 @@ public class ErrorMessage {
 
 
 
+    public final static String PRINCIPAL_FOUND_MESSAGE = "User not found";
+    public final static String BOOK_IS_NOT_AVAILABLE_MESSAGE = "The book is currently in user";
+    public final static String BOOK_IS_NOT_LOANABLE_MESSAGE = "The book is close to loan";
+    public final static String SCORE_IS_NOT_ENOUGH = "Your score does not between -2 and 2";
 
 
 

@@ -14,6 +14,7 @@ import com.lib.exception.ResourceNotFoundException;
 import com.lib.exception.message.ErrorMessage;
 import com.lib.mapper.UserMapper;
 import com.lib.repository.UserRepository;
+import com.lib.security.SecurityUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -240,6 +241,13 @@ public class UserService {
     }
 
 
+    public User getCurrentUser() {
 
+        String email=SecurityUtils.getCurrentUserLogin().orElseThrow(()->
+                new ResourceNotFoundException(ErrorMessage.PRINCIPAL_FOUND_MESSAGE));
 
+        User user=getUserByEmail(email);
+        return user;
+
+    }
 }
