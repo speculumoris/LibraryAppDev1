@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,14 +18,12 @@ import java.time.LocalDateTime;
 public class LoanDTO {
 
     private Long id;
-    private Long userId;
-    private Long bookId;
     private LocalDateTime loanDate;
     private LocalDateTime expireDate;
     private LocalDateTime returnDate;
     private String notes;
-    private Book book;
-    private User user;
+    private Long bookId;
+    private Long userId;
 
 
 }
