@@ -92,4 +92,10 @@ public class LoanService {
     }
 
 
+    public boolean existByBook(Book book) {
+
+
+
+
+    }
 }

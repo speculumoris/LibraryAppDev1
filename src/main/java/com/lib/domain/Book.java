@@ -19,7 +19,7 @@ import java.util.List;
 @Table(name = "t_book")
 public class Book {
 
-   @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -50,12 +50,17 @@ public class Book {
     private String shelfCode;
 
     private boolean active=true;
+
     private boolean featured=false;
+
     private boolean loanable=true;
 
     @NotNull
     private LocalDateTime createDate;
+
     private boolean builtIn =false;
+
+
     @ManyToOne
     private Category category;
 

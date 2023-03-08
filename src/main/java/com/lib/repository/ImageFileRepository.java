@@ -17,7 +17,7 @@ public interface ImageFileRepository extends JpaRepository<ImageFile,String> {
 
 
 
-    @EntityGraph(attributePaths = "id") // id fieldının seviyesindeki datalar gelsin bana diyorum
+    @EntityGraph(attributePaths = "id")
     List<ImageFile> findAll();
 
 
