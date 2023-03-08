@@ -1,6 +1,4 @@
 package com.lib.domain;
-
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +19,7 @@ import java.util.List;
 @Table(name = "t_book")
 public class Book {
 
-    @Id
+   @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -44,24 +42,20 @@ public class Book {
 
     @Pattern(regexp = "^\\s{2}-\\d{3}$")
     @OneToMany(orphanRemoval = true)
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book__id")
     private List<ImageFile> imageFile;
-
 
     @NotNull(message = "ShelfCode cannot be null")
     @Column(length = 6)
     private String shelfCode;
 
-
     private boolean active=true;
     private boolean featured=false;
+    private boolean loanable=true;
 
     @NotNull
     private LocalDateTime createDate;
-
-
     private boolean builtIn =false;
-
     @ManyToOne
     private Category category;
 

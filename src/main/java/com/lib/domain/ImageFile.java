@@ -1,11 +1,12 @@
 package com.lib.domain;
 
-import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -25,6 +26,7 @@ public class ImageFile {
     private String type;
 
     private long length;
+
 
     @OneToOne(cascade = CascadeType.ALL)
     private ImageData imageData;

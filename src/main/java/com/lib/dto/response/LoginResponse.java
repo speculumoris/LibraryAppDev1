@@ -1,5 +1,4 @@
-package com.lib.dto;
-
+package com.lib.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,10 +9,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryDTO {
+public class LoginResponse {
 
-    private Long id;
-    private String name;
-    private boolean builtIn=false;
-    private int sequence;
+
+    private String token;
+
+
+
+
 }

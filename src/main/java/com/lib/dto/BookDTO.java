@@ -2,9 +2,8 @@ package com.lib.dto;
 
 
 import com.lib.domain.ImageFile;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,8 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class BookDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
 
     private String name;

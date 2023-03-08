@@ -1,5 +1,4 @@
-package com.lib.domain;
-
+package com.lib.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -8,27 +7,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.List;
 
+@AllArgsConstructor@NoArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
-@Table(name = "t_loan")
-public class Loan {
-
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class LoanRequest {
 
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy HH:mm:ss")
-    private LocalDateTime loanDate=LocalDateTime.now();
+    @NotNull(message="Please provide loan date of the book")
+    private LocalDateTime loanDate;
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy HH:mm:ss")
     @NotNull(message="Please provide expire date of the book")
     private LocalDateTime expireDate;
@@ -37,18 +27,6 @@ public class Loan {
     @NotNull(message="Please provide return date of the book")
     @Column(nullable = false)
     private LocalDateTime returnDate;
-
-    @Column(nullable = false)
-    @Size(max = 300)
-    private String notes;
-
-    @ManyToOne
-    @JoinColumn(name = "book_id",referencedColumnName = "id")
-    private Book book;
-    @ManyToOne
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
-    private User user;
-
 
 
 }
