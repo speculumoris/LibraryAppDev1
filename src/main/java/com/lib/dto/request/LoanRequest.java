@@ -1,10 +1,8 @@
-package com.lib.domain;
-
+package com.lib.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,18 +10,10 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@AllArgsConstructor@NoArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
-@Table(name = "t_loan")
-public class Loan {
-
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class LoanRequest {
 
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy HH:mm:ss")
     @NotNull(message="Please provide loan date of the book")
@@ -36,19 +26,6 @@ public class Loan {
     @NotNull(message="Please provide return date of the book")
     @Column(nullable = false)
     private LocalDateTime returnDate;
-
-    @Column(nullable = false)
-    @Size(max = 300)
-    private String notes;
-
-    @OneToOne
-    @JoinColumn(name = "book_id",referencedColumnName = "id")
-    private Book book;
-
-    @OneToOne
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
-    private User user;
-
 
 
 }
