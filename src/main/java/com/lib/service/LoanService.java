@@ -56,13 +56,15 @@ public class LoanService {
             if (!(score > 2) && !(score < -2)) {
                 user.setScore(score + 1);
             } else user.setScore(score - 1);
+
         }
 
-        loan.getBook().add(book);
-        loan.getUser().add(user);
+        loan.setBook(book);
+        loan.setUser(user);
 
         loanRepository.save(loan);
     }
+
     //Kitap müsait mi?
     //Kitap kiralanabilir mi?
     //Kaç kitap alınacak?

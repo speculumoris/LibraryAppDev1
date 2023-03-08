@@ -22,8 +22,8 @@ public class LoanDTO {
     private LocalDateTime expireDate;
     private LocalDateTime returnDate;
     private String notes;
-    private Book book;
-    private User user;
+    private Long bookId;
+    private Long userId;
 
 
 }
