@@ -17,4 +17,7 @@ public class PublisherDTO {
 
     private Boolean builtIn = false;
 
+    public String findByName(String name) {
+      return this.name;
+    }
 }
