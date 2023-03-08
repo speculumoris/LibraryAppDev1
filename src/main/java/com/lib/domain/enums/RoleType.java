@@ -2,9 +2,9 @@ package com.lib.domain.enums;
 
 public enum RoleType {
 
-    MEMBER_TYPE("Member"),
-    EMPLOYEE_TYPE("Employee"),
-    ADMIN_TYPE("Administrator");
+    ROLE_MEMBER("Member"),
+    ROLE_EMPLOYEE("Employee"),
+    ROLE_ADMIN("Administrator");
 
     private String name;
 

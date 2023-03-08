@@ -5,6 +5,7 @@ import com.lib.domain.User;
 import com.lib.domain.enums.RoleType;
 import com.lib.dto.UserDTO;
 import com.lib.dto.request.AdminCreateByUserRequest;
+import com.lib.dto.request.RegisterRequest;
 import com.lib.dto.request.UserUpdateRequest;
 import com.lib.exception.BadRequestException;
 import com.lib.exception.ConflictException;
@@ -13,8 +14,10 @@ import com.lib.exception.ResourceNotFoundException;
 import com.lib.exception.message.ErrorMessage;
 import com.lib.mapper.UserMapper;
 import com.lib.repository.UserRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -27,11 +30,16 @@ public class UserService {
     private final RoleService roleService;
     private final UserMapper userMapper;
 
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, RoleService roleService, UserMapper userMapper) {
+
+    public UserService(UserRepository userRepository, RoleService roleService,
+                       UserMapper userMapper, @Lazy PasswordEncoder passwordEncoder) {
+
         this.userRepository = userRepository;
         this.roleService = roleService;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -51,7 +59,7 @@ public class UserService {
 
     public UserDTO getUserById(Long id) {
        User user = userRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_EXCEPTION, id)));
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION, id)));
 
        UserDTO userDTO = userMapper.userToUserDTO(user);
        return userDTO;
@@ -68,7 +76,7 @@ public class UserService {
         }
 
         if(request.getPassword() != null){
-            user.setPassword(request.getPassword());  ///   !!! Encode edilecek  --- -
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
 
         user.setFirstName(request.getFirstName());
@@ -80,7 +88,7 @@ public class UserService {
 
         Set<String> userStrRole = request.getRoles();
 
-        /// SECURITY OLUSTURULUNCA ADMIN VE EMPO
+        /// SECURITY OLUSTURULUNCA ADMIN VE EMPlOYee kontrolu yapilacak
 
 
         Set<Role> roles = convertRoles(userStrRole);
@@ -115,8 +123,8 @@ public class UserService {
         if(userUpdateRequest.getPassword() == null){
             userUpdateRequest.setPassword(user.getPassword());
         }else{
-//            String encodedPassword = passwordEncoder.encode(userUpdateRequest.getPassword());
-//            userUpdateRequest.setPassword(encodedPassword);
+           String encodedPassword = passwordEncoder.encode(userUpdateRequest.getPassword());
+             userUpdateRequest.setPassword(encodedPassword);
         }
 
 
@@ -140,7 +148,7 @@ public class UserService {
     public User getById(Long id){
 
        User user = userRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_EXCEPTION, id)));
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION, id)));
        return user;
     }
 
@@ -151,18 +159,18 @@ public class UserService {
         Set<Role> roles = new HashSet<>();
 
         if(pRoles==null){
-            Role userRole = roleService.findByType(RoleType.MEMBER_TYPE);
+            Role userRole = roleService.findByType(RoleType.ROLE_MEMBER);
             roles.add(userRole);
         }else {
             pRoles.forEach(roleStr->{
-                if(roleStr.equals(RoleType.ADMIN_TYPE.getName())){
-                    Role adminRole = roleService.findByType(RoleType.ADMIN_TYPE);
+                if(roleStr.equals(RoleType.ROLE_ADMIN.getName())){
+                    Role adminRole = roleService.findByType(RoleType.ROLE_ADMIN);
                     roles.add(adminRole);
-                }else if(roleStr.equals(RoleType.EMPLOYEE_TYPE.getName())){
-                    Role employeeRole = roleService.findByType(RoleType.EMPLOYEE_TYPE);
+                }else if(roleStr.equals(RoleType.ROLE_EMPLOYEE.getName())){
+                    Role employeeRole = roleService.findByType(RoleType.ROLE_EMPLOYEE);
                     roles.add(employeeRole);
                 }else{
-                    Role userRole = roleService.findByType(RoleType.MEMBER_TYPE);
+                    Role userRole = roleService.findByType(RoleType.ROLE_MEMBER);
                     roles.add(userRole);
                 }
             });
@@ -175,9 +183,62 @@ public class UserService {
         User user = getById(id);
 
         boolean builtIn = user.isBuiltIn();
+        // builtIn control
+        if(builtIn){
+            throw new BadRequestException(ErrorMessage.NOT_PERMITTED_METHOD_MESSAGE);
+        }
+            // member in emanette kitabi var mi kontrol edilecek
+
 
         userRepository.delete(user);
     }
+
+
+    public User getUserByEmail(String email) {
+
+        User user = userRepository.findByEmail(email).orElseThrow(
+                ()->new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION, email)));
+        return user;
+    }
+
+    public void saveUser(RegisterRequest registerRequest) {
+
+
+        // email daha once kullanildi mi
+        if(userRepository.existsByEmail(registerRequest.getEmail())){
+            throw new ClassCastException(
+                    String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE, registerRequest.getEmail()));
+        }
+
+        // default olarak member rol bligisi atandi
+        Role role = roleService.findByType(RoleType.ROLE_MEMBER);
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+
+        //DB ye gitmeden once password encode edildi
+        String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
+        String encodedResetPassword = passwordEncoder.encode(registerRequest.getResetPasswordCode());
+
+
+
+        // !! yeni kullanicinin gerkli bilgilerini setleyip DB ye gonderiyoruz.
+
+        User user = new User();
+        user.setFirstName(registerRequest.getFirstName());
+        user.setLastName(registerRequest.getLastName());
+        user.setEmail(registerRequest.getEmail());
+        user.setPassword(encodedPassword);
+        user.setPhone(registerRequest.getPhone());
+        user.setAddress(registerRequest.getAddress());
+        user.setResetPasswordCode(encodedResetPassword);
+        user.setBirthDate(registerRequest.getBirthDate());
+
+        user.setRoles(roles);
+
+        userRepository.save(user);
+    }
+
 
 
 

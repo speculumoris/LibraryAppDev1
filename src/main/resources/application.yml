@@ -26,6 +26,39 @@ servlet:
     max-request-size: 2MB
 
 
+
+
+logging:
+  file:
+    name: log/library.log
+  pattern:
+    file: "%d %-5level [%thread] %logger:%msg%n"
+  level:
+    '[org.springframework.web]' : WARN
+    '[org.hibernate]' : INFO
+    '[com.saferent]' : DEBUG
+
+management: #actuator
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  info:
+    env:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+
+
+library:
+  app:
+    jwtSecret: library_Dev1-Project*2023*
+    jwtExpirationMs : 86400000
+
+
 info:
   application:
     name: 'Library Backend App'
