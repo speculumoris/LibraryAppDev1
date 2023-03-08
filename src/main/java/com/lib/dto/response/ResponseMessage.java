@@ -23,6 +23,11 @@ public class ResponseMessage {
 
 
 
+    public final static String PUBLISHER_CREATED_RESPONSE = "Publisher successfully created";
+    public final static String PUBLISHER_DELETE_RESPONSE_MESSAGE = "Publisher successfully deleted";
+    public final static String PUBLISHER_UPDATE_RESPONSE_MESSAGE = "Publisher updated successfully ";
+
+
 
 
 
