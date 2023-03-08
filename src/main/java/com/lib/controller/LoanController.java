@@ -30,12 +30,11 @@ public class LoanController {
 
     private final BookService bookService;
 
-    public LoanController(LoanService loanService, UserService userService, BookService bookServic) {
+    public LoanController(LoanService loanService, UserService userService, BookService bookService) {
         this.loanService = loanService;
         this.userService = userService;
-        this.bookService=bookServic;
+        this.bookService = bookService;
     }
-
 
     @GetMapping
     public ResponseEntity<Page<LoanDTO>> getAllLoanWithPage( @RequestParam("page") int page,
