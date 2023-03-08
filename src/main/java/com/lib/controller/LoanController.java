@@ -47,10 +47,11 @@ public class LoanController {
     }
 
     @PostMapping
-    public ResponseEntity<LibResponse> createLoan(@RequestParam Book bookId,
+    public ResponseEntity<LibResponse> createLoan(@RequestParam Long bookId,
                                                   @Valid @RequestBody LoanRequest loanRequest){
 
         Book book=bookService.getBookById(bookId);
+
 
 
 

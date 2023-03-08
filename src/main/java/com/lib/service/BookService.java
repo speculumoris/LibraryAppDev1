@@ -1,15 +1,17 @@
 package com.lib.service;
 
+import com.lib.domain.Book;
+import com.lib.exception.ResourceNotFoundException;
+import com.lib.exception.message.ErrorMessage;
 import com.lib.repository.BookRepository;
-import org.springframework.stereotype.Service;
 
 public class BookService {
 
-    private final BookRepository bookService;
+    private final BookRepository bookRepository;
 
 
-    public BookService(BookRepository bookService) {
-        this.bookService = bookService;
+    public BookService(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
 
 
@@ -49,4 +51,14 @@ public class BookService {
 
 
 
+
+
+
+
+    public Book getBookById(Long bookId){
+
+        Book book=bookRepository.findById(bookId).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_EXCEPTION,bookId)));
+        return book;
+    }
 }
