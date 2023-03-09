@@ -56,7 +56,7 @@ public class Book {
     private boolean featured=false;
 
     @NotNull
-    private LocalDateTime createDate;
+    private LocalDateTime createDate = LocalDateTime.now();
 
 
     private boolean builtIn =false;

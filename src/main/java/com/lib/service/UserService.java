@@ -69,6 +69,7 @@ public class UserService {
 
     public void UserCreatedByAdmin( AdminCreateByUserRequest request) {
 
+
         User user = new User();
         boolean exists = userRepository.existsByEmail(request.getEmail());
 
@@ -89,15 +90,19 @@ public class UserService {
 
         Set<String> userStrRole = request.getRoles();
 
-        /// SECURITY OLUSTURULUNCA ADMIN VE EMPlOYee kontrolu yapilacak
-
-
         Set<Role> roles = convertRoles(userStrRole);
+
+        User currentUser = getCurrentUser();
+
+        if(currentUser.getRoles().equals(RoleType.ROLE_EMPLOYEE)){
+            if(!roles.equals(RoleType.ROLE_MEMBER)){
+                throw new ResourceNotFoundException(ErrorMessage.UNAUTHRIZED_FOUND_MESSAGE);
+            }
+        }
 
         user.setRoles(roles);
 
         userRepository.save(user);
-
     }
 
 
@@ -133,15 +138,25 @@ public class UserService {
         Set<String> userStrRoles = userUpdateRequest.getRoles();
         Set<Role> roles = convertRoles(userStrRoles);
 
-        // CURRENT OLAN ADMIN MI EMPLOYEE MI ????????
+        // ADMIN TUM KULLANICILARI UPDATE EDER - EMPLOYEE ISE SADECE MEMBER'I UPDATE EDER
+        User currentUser = getCurrentUser();
 
-        // ADMIN ISE  TUM KULLANICILARI UPDATE EDER   EMPLOYEE ISE SADECE MEMBER'I UPDATE EDER
+        if(currentUser.getRoles().equals(RoleType.ROLE_EMPLOYEE) && !roles.equals(RoleType.ROLE_MEMBER) ){
+            throw new ResourceNotFoundException(ErrorMessage.UNAUTHRIZED_FOUND_MESSAGE);
+        }
 
+        user.setFirstName(userUpdateRequest.getFirstName());
+        user.setLastName(userUpdateRequest.getLastName());
+        user.setScore(userUpdateRequest.getScore());
+        user.setAddress(userUpdateRequest.getAddress());
+        user.setPhone(userUpdateRequest.getPhone());
+        user.setBirthDate(userUpdateRequest.getBirthDate());
+        user.setPassword(userUpdateRequest.getPassword());
 
+        Set<Role> role = convertRoles(userUpdateRequest.getRoles());
+        user.setRoles(role);
 
-
-
-
+        userRepository.save(user);
     }
 
 
@@ -184,11 +199,16 @@ public class UserService {
         User user = getById(id);
 
         boolean builtIn = user.isBuiltIn();
-        // builtIn control
+
         if(builtIn){
             throw new BadRequestException(ErrorMessage.NOT_PERMITTED_METHOD_MESSAGE);
         }
+
             // member in emanette kitabi var mi kontrol edilecek
+
+                    //   !!!!!!
+                    //    !!!
+
 
 
         userRepository.delete(user);
@@ -222,7 +242,6 @@ public class UserService {
         String encodedResetPassword = passwordEncoder.encode(registerRequest.getResetPasswordCode());
 
 
-
         // !! yeni kullanicinin gerkli bilgilerini setleyip DB ye gonderiyoruz.
 
         User user = new User();
@@ -241,13 +260,20 @@ public class UserService {
     }
 
 
-    public User getCurrentUser() {
+    // Sisteme giris yapan kullanici bilgisi
+    public UserDTO getPrincipal() {
 
-        String email=SecurityUtils.getCurrentUserLogin().orElseThrow(()->
-                new ResourceNotFoundException(ErrorMessage.PRINCIPAL_FOUND_MESSAGE));
-
-        User user=getUserByEmail(email);
-        return user;
-
+        User user = getCurrentUser();
+        UserDTO userDTO= userMapper.userToUserDTO(user);
+        return userDTO;
     }
+
+    public User getCurrentUser(){
+        String email = SecurityUtils.getCurrentUserLogin().orElseThrow(()->
+                new ResourceNotFoundException(ErrorMessage.PRINCIPAL_FOUND_MESSAGE));
+        User user = getUserByEmail(email);
+
+        return user;
+    }
+
 }
