@@ -19,7 +19,6 @@ public interface PublisherRepository extends JpaRepository <Publisher,Long> {
     Integer findPublisherCountByImageId(@Param("id") String id);
 
     @EntityGraph(attributePaths = {"image"})
-
     Optional<Object> findPublisherById(Long id);
 
     @Query("Select p from Publisher p join p.image im where im.id=:id")
