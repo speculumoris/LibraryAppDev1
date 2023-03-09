@@ -2,9 +2,6 @@ package com.lib.dto;
 
 import com.lib.domain.Book;
 import com.lib.domain.User;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

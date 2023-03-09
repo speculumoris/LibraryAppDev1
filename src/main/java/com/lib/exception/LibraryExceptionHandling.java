@@ -6,6 +6,7 @@ import org.springframework.beans.*;
 import org.springframework.http.*;
 import org.springframework.http.converter.*;
 
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.*;
@@ -80,10 +81,8 @@ public class LibraryExceptionHandling extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers,
-                                                                  HttpStatusCode status,
-                                                                  WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
         List<String> errors = ex.getBindingResult().getFieldErrors().
                 stream().
                 map(e->e.getDefaultMessage()).
@@ -96,10 +95,7 @@ public class LibraryExceptionHandling extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex,
-                                                        HttpHeaders headers,
-                                                        HttpStatusCode status,
-                                                        WebRequest request) {
+    protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
         ApiResponseError error = new ApiResponseError(HttpStatus.BAD_REQUEST,
                 ex.getMessage(),
@@ -108,10 +104,7 @@ public class LibraryExceptionHandling extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleConversionNotSupported(ConversionNotSupportedException ex,
-                                                                  HttpHeaders headers,
-                                                                  HttpStatusCode status,
-                                                                  WebRequest request) {
+    protected ResponseEntity<Object> handleConversionNotSupported(ConversionNotSupportedException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
         ApiResponseError error = new ApiResponseError(HttpStatus.INTERNAL_SERVER_ERROR
                 ,
@@ -121,11 +114,7 @@ public class LibraryExceptionHandling extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-                                                                  HttpHeaders headers,
-                                                                  HttpStatusCode status,
-                                                                  WebRequest request) {
-
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ApiResponseError error = new ApiResponseError(HttpStatus.BAD_REQUEST,
                 ex.getMessage(),
                 request.getDescription(false))  ;

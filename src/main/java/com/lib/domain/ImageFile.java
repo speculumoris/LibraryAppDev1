@@ -1,11 +1,13 @@
 package com.lib.domain;
 
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 @Getter
 @Setter
