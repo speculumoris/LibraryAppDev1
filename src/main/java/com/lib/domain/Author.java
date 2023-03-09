@@ -1,11 +1,7 @@
 package com.lib.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,20 +14,17 @@ import java.util.List;
 @Getter
 @Setter
 public class Author {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    @NotNull(message = "Author name cannot be null")
+    @NotNull(message = "Author name can not be null")
     @Size(min = 4,max = 70,message = "Author name '${validateValue}' should be between {min} and {max}")
     private String name;
 
-
+    @NotNull
     private boolean builtIn =false;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "author")
     private List<Book> bookList;
 

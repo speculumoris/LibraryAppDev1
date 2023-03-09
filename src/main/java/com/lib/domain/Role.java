@@ -2,8 +2,6 @@ package com.lib.domain;
 
 import com.lib.domain.enums.RoleType;
 
-
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

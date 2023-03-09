@@ -3,7 +3,6 @@ package com.lib.dto.response;
 public class ResponseMessage {
 
 
-    public final static String LOAN_CREATED_RESPONSE = "Loan succsessfully created";
 
 
 
@@ -39,15 +38,26 @@ public class ResponseMessage {
 
 
 
-    public final static String USER_CREATED_RESPONSE = "User succsessfully created";
 
 
 
 
 
-    public final static String USER_UPDATE_RESPONSE_MESSAGE = "User succsessfully updated";
-    public final static String USER_DELETE_RESPONSE_MESSAGE = "User succsessfully deleted";
-    public final static String REGISTER_RESPONSE_MESSAGE = "Registration succsessfully done";
+
+
+
+
+
+    public final static  String AUTHOR_CREATED_RESPONSE_MESSAGE = "Author successfully created";
+    public final static  String AUTHOR_UPDATE_RESPONSE_MESSAGE = "Author successfully updated";
+    public final static  String AUTHOR_DELETE_RESPONSE_MESSAGE = "Author successfully deleted";
+
+
+
+
+
+
+
 
 
 }

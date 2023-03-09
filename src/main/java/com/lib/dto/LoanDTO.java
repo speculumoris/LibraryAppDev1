@@ -2,14 +2,12 @@ package com.lib.dto;
 
 import com.lib.domain.Book;
 import com.lib.domain.User;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -18,12 +16,14 @@ import java.util.List;
 public class LoanDTO {
 
     private Long id;
+    private Long userId;
+    private Long bookId;
     private LocalDateTime loanDate;
     private LocalDateTime expireDate;
     private LocalDateTime returnDate;
     private String notes;
-    private Long bookId;
-    private Long userId;
+    private Book book;
+    private User user;
 
 
 }

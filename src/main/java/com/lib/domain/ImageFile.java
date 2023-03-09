@@ -1,5 +1,6 @@
 package com.lib.domain;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,6 @@ public class ImageFile {
     private String type;
 
     private long length;
-
 
     @OneToOne(cascade = CascadeType.ALL)
     private ImageData imageData;

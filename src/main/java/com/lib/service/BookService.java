@@ -62,7 +62,7 @@ public class BookService {
     public Book getBookById(Long bookId){
 
         Book book=bookRepository.findById(bookId).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION,bookId)));
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_EXCEPTION,bookId)));
         return book;
     }
 }

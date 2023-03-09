@@ -1,5 +1,6 @@
 package com.lib.domain;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,19 +16,18 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
+
 @Table(name = "t_user")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     @NotNull(message = "first name cannot be null")
     @Size(min = 2,max = 30,message = "First name '${validateValue}' should be between {min} and {max}")
@@ -58,11 +58,10 @@ public class User {
     @NotNull(message = "password cannot be null")
     private String password;
 
-    private LocalDateTime createDate = LocalDateTime.now();
+    private LocalDateTime createDate;
 
     @Column(nullable = false)
     private String resetPasswordCode;
-
 
     private boolean builtIn=false;
 
