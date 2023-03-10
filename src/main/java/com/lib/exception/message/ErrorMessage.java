@@ -4,7 +4,9 @@ public class ErrorMessage {
 
     public final static String RESOURCE_NOT_FOUND_EXCEPTION = "Resource with id %s not found";
     public final static String IMAGE_USED_MESSAGE = "ImageFile is used by another book";
+    public final static String BOOK_USED_MESSAGE = "Book is used by another category";
     public final static String BOOK_USED_BY_LOAN_MESSAGE = "Book couldn't be deleted. Book is used by a loan";
+    public final static String CATEGORY_USED_BY_LOAN_MESSAGE = "Category couldn't be deleted. Category is used by a loan";
 
 
     public final static String PRINCIPAL_FOUND_MESSAGE = "User not found";
@@ -45,5 +47,6 @@ public class ErrorMessage {
     public final static String NOT_PERMITTED_METHOD_MESSAGE = "You don't have any permission to this data";
     public final static String JWTTOKEN_ERROR_MESSAGE = "JWT Token Validation Error : %s";
     public final static String IMAGE_NOT_FOUND_MESSAGE = "Image with id : %s not found";
+    public final static String BOOK_NOT_FOUND_MESSAGE = "Book with id : %s not found";
 
 }

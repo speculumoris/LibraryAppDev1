@@ -10,6 +10,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -58,8 +59,7 @@ public class Book {
     @NotNull
     private LocalDateTime createDate;
 
-    private boolean builtIn =false;
-
+    private Boolean builtIn = false;
 
     @ManyToOne
     private Category category;
@@ -70,6 +70,9 @@ public class Book {
     @ManyToOne
     private Author author;
 
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name="book_id")
+    private Set<ImageFile> image;
 
 
 

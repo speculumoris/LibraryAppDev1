@@ -11,11 +11,13 @@ import com.lib.mapper.BookMapper;
 import com.lib.repository.BookRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Service
 public class BookService {
 
     private final BookRepository bookRepository;
@@ -45,8 +47,8 @@ public class BookService {
         ImageFile imageFile = imageFileService.findImageById(imageId);
 
         // !!! imageId daha önce başka bir araç için kullanıldı mı ??
-        Integer usedCarCount = bookRepository.findBookCountByImageId(imageFile.getId());
-        if (usedCarCount > 0) {
+        Integer usedBookCount = bookRepository.findBookCountByImageId(imageFile.getId());
+        if (usedBookCount > 0) {
             throw new ConflictException(ErrorMessage.IMAGE_USED_MESSAGE);
         }
 
@@ -157,5 +159,11 @@ public class BookService {
     }
 
 
+    public Book findBookById(Long bookId) {
 
+        return bookRepository.findBookById(bookId).orElseThrow(
+                ()-> new ResourceNotFoundException(String.format(ErrorMessage.BOOK_NOT_FOUND_MESSAGE,bookId)));
+
+
+    }
 }

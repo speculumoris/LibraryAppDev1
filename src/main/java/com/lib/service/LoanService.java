@@ -1,6 +1,7 @@
 package com.lib.service;
 
 import com.lib.domain.Book;
+import com.lib.domain.Category;
 import com.lib.domain.Loan;
 import com.lib.domain.User;
 import com.lib.dto.LoanDTO;
@@ -96,8 +97,13 @@ public class LoanService {
 
     public boolean existByBook(Book book) {
 
+        return loanRepository.existByBook(book);
 
+    }
 
+    public boolean existByCategory(Category category) {
+
+        return loanRepository.existByCategory(category);
 
     }
 }
