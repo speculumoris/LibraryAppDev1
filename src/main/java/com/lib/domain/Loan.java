@@ -9,7 +9,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -24,8 +23,7 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime loanDate = LocalDateTime.now();
-
+    private LocalDateTime loanDate;
     private LocalDateTime expireDate;
     private LocalDateTime returnDate;
 
@@ -33,13 +31,11 @@ public class Loan {
     @Size(max = 300)
     private String notes;
 
-    @OneToMany
-    @JoinColumn(name = "book_id", referencedColumnName = "id")
-    private List<Book> book;
+    @OneToOne
+    private Book book;
 
-    @OneToMany
-    @JoinColumn(name = "ueser_id", referencedColumnName = "id")
-    private List<User> user;
+    @OneToOne
+    private User user;
 
 
 

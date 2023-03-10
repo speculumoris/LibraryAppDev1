@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/loan")
@@ -66,4 +67,28 @@ public class LoanController {
 
     }
 
+    @PostMapping("/{id}")
+    public ResponseEntity<LoanDTO> getLoanById(@PathVariable Long id){
+
+        LoanDTO loan=loanService.getLoanDeatilsById(id);
+
+        return ResponseEntity.ok(loan);
+    }
+
+    @PostMapping
+    public ResponseEntity<List<LoanDTO>> getAllLoanDTO(){
+
+       List<LoanDTO> loanDTOList= loanService.getAllLoan();
+
+       return ResponseEntity.ok(loanDTOList);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<LoanDTO> loanDTOSAuthUser(@PathVariable Long id){
+
+        User user=userService.getCurrentUser();
+      LoanDTO loanDTO=  loanService.findByIdAndUser(id,user);
+
+      return ResponseEntity.ok(loanDTO);
+    }
 }
