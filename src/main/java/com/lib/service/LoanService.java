@@ -5,7 +5,7 @@ import com.lib.domain.Loan;
 import com.lib.domain.User;
 import com.lib.dto.LoanDTO;
 import com.lib.dto.request.LoanRequest;
-import com.lib.dto.response.LibResponse;
+
 import com.lib.exception.BadRequestException;
 import com.lib.exception.message.ErrorMessage;
 import com.lib.mapper.LoanMapper;
@@ -13,15 +13,13 @@ import com.lib.repository.LoanRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDate;
+import org.springframework.stereotype.Service;
+
+
+
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+
 
 @Service
 public class LoanService {

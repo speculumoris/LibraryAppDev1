@@ -4,7 +4,9 @@ import com.lib.domain.Book;
 import com.lib.exception.ResourceNotFoundException;
 import com.lib.exception.message.ErrorMessage;
 import com.lib.repository.BookRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class BookService {
 
     private final BookRepository bookRepository;

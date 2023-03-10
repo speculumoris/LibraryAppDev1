@@ -1,18 +1,24 @@
 package com.lib.service;
 
+import com.google.common.hash.Hashing;
+import com.lib.domain.Loan;
 import com.lib.domain.Role;
 import com.lib.domain.User;
 import com.lib.domain.enums.RoleType;
+import com.lib.dto.LoanDTO;
 import com.lib.dto.UserDTO;
 import com.lib.dto.request.AdminCreateByUserRequest;
 import com.lib.dto.request.RegisterRequest;
+import com.lib.dto.request.ResetPassword;
 import com.lib.dto.request.UserUpdateRequest;
 import com.lib.exception.BadRequestException;
 import com.lib.exception.ConflictException;
 
 import com.lib.exception.ResourceNotFoundException;
 import com.lib.exception.message.ErrorMessage;
+import com.lib.mapper.LoanMapper;
 import com.lib.mapper.UserMapper;
+import com.lib.repository.LoanRepository;
 import com.lib.repository.UserRepository;
 import com.lib.security.SecurityUtils;
 import org.springframework.context.annotation.Lazy;
@@ -21,7 +27,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -30,17 +39,22 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final UserMapper userMapper;
-
     private final PasswordEncoder passwordEncoder;
+    private final LoanService loanService;
+    private final LoanRepository loanRepository;
+    private final LoanMapper loanMapper;
 
-
-    public UserService(UserRepository userRepository, RoleService roleService,
-                       UserMapper userMapper, @Lazy PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RoleService roleService, UserMapper userMapper,
+                       @Lazy PasswordEncoder passwordEncoder, LoanService loanService,
+                       LoanRepository loanRepository, LoanMapper loanMapper) {
 
         this.userRepository = userRepository;
         this.roleService = roleService;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.loanService = loanService;
+        this.loanRepository = loanRepository;
+        this.loanMapper = loanMapper;
     }
 
 
@@ -77,9 +91,28 @@ public class UserService {
             throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE, request.getEmail()));
         }
 
-        if(request.getPassword() != null){
-            user.setPassword(passwordEncoder.encode(request.getPassword()));
-        }
+        String sha256hex = Hashing.sha256()
+                .hashString(request.getResetPasswordCode(), StandardCharsets.UTF_8)
+                .toString();
+
+
+        User currentUser = getCurrentUser();
+
+        Set<String> userStrRole = request.getRoles();
+
+        Set<Role> roles = convertRoles(userStrRole);
+
+
+
+        //currentUser.getRoles().equals(RoleType.ROLE_EMPLOYEE)
+        //&& !userStrRole.equals(RoleType.ROLE_MEMBER.getName())
+        //(currentUser.getRoles() != roleService.findByType(RoleType.ROLE_ADMIN)) &&
+//
+//        if(currentUser.getRoles().equals(RoleType.ROLE_EMPLOYEE)) {
+//                throw new ResourceNotFoundException(ErrorMessage.NOT_PERMITTED_METHOD_MESSAGE);
+//
+//        }
+
 
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
@@ -87,19 +120,8 @@ public class UserService {
         user.setPhone(request.getPhone());
         user.setBirthDate(request.getBirthDate());
         user.setEmail(request.getEmail());
-
-        Set<String> userStrRole = request.getRoles();
-
-        Set<Role> roles = convertRoles(userStrRole);
-
-        User currentUser = getCurrentUser();
-
-        if(currentUser.getRoles().equals(RoleType.ROLE_EMPLOYEE)){
-            if(!roles.equals(RoleType.ROLE_MEMBER)){
-                throw new ResourceNotFoundException(ErrorMessage.UNAUTHRIZED_FOUND_MESSAGE);
-            }
-        }
-
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setResetPasswordCode(sha256hex);
         user.setRoles(roles);
 
         userRepository.save(user);
@@ -204,13 +226,21 @@ public class UserService {
             throw new BadRequestException(ErrorMessage.NOT_PERMITTED_METHOD_MESSAGE);
         }
 
-            // member in emanette kitabi var mi kontrol edilecek
+        boolean existsByUser = loanRepository.existsByUser(user);
+        List<Loan> loanList = loanRepository.findAllByUserId(id);
 
-                    //   !!!!!!
-                    //    !!!
+        if(existsByUser) {
+            int count = 0;
+            for (Loan w : loanList) {
+                if (w.getReturnDate() == null) {
+                    count++;
+                }
+            }
 
-
-
+            if (count > 0) {
+                throw new BadRequestException(ErrorMessage.NOT_PERMITTED_METHOD_MESSAGE);
+            }
+        }
         userRepository.delete(user);
     }
 
@@ -239,8 +269,11 @@ public class UserService {
 
         //DB ye gitmeden once password encode edildi
         String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
-        String encodedResetPassword = passwordEncoder.encode(registerRequest.getResetPasswordCode());
 
+
+        String sha256hex = Hashing.sha256()
+                .hashString(registerRequest.getResetPasswordCode(), StandardCharsets.UTF_8)
+                .toString();
 
         // !! yeni kullanicinin gerkli bilgilerini setleyip DB ye gonderiyoruz.
 
@@ -251,7 +284,7 @@ public class UserService {
         user.setPassword(encodedPassword);
         user.setPhone(registerRequest.getPhone());
         user.setAddress(registerRequest.getAddress());
-        user.setResetPasswordCode(encodedResetPassword);
+        user.setResetPasswordCode(sha256hex);
         user.setBirthDate(registerRequest.getBirthDate());
 
         user.setRoles(roles);
@@ -275,5 +308,46 @@ public class UserService {
 
         return user;
     }
+
+
+    public Page<LoanDTO> getAllUsersLoans(User user, Pageable pageable) {
+
+        Page<Loan> loans = loanRepository.findAllByUser(user, pageable);
+        return loans.map(loanMapper::loanToLoanDTO);
+    }
+
+
+    public void resetPassword(ResetPassword resetPassword) {
+
+        User user = userRepository.findByEmail(resetPassword.getEmail()).orElseThrow(()->
+                new ResourceNotFoundException(
+                        String.format(ErrorMessage.RESOURSE_NOT_FOUNT_EXCEPTION, resetPassword.getEmail())));
+
+
+      //  String encodePassword = passwordEncoder.encode(resetPassword.getResetPasswordCode());
+
+        String sha256hex = Hashing.sha256()
+                .hashString(resetPassword.getResetPasswordCode(), StandardCharsets.UTF_8)
+                .toString();
+
+        if(!sha256hex.equals(user.getResetPasswordCode())){
+            throw new BadRequestException(ErrorMessage.PASSWORD_NOT_FOUNT_EXCEPTION);
+        }
+
+        String newPassword = passwordEncoder.encode(resetPassword.getNewPassword());
+
+        user.setPassword(newPassword);
+
+        userRepository.save(user);
+    }
+
+
+    public User userById(Long id) {
+
+       User user = userRepository.findById(id).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION, id)));
+        return user;
+    }
+
 
 }

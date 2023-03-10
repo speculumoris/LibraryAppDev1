@@ -55,7 +55,7 @@ public class Book {
 
     private boolean active=true;
     private boolean featured=false;
-
+    private boolean loanable=true;
     @NotNull
     private LocalDateTime createDate = LocalDateTime.now();
 
@@ -70,8 +70,6 @@ public class Book {
 
     @ManyToOne
     private Author author;
-
-
 
 
 
