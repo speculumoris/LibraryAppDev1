@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -94,6 +95,17 @@ public class UserController {
 
 
     /// authenticated user  currentUser methodu yazilacak
+
+
+    // Sisteme giris yapan kullanici bilgisi
+    @GetMapping("/user")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE') or hasRole('MEMBER')")
+    public ResponseEntity<UserDTO> getUser() {
+        UserDTO userDTO = userService.getPrincipal();
+
+        return ResponseEntity.ok(userDTO);
+    }
+
 
 
 

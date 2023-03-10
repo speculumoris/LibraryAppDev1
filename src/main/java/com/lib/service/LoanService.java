@@ -1,13 +1,13 @@
 package com.lib.service;
 
 import com.lib.domain.Book;
-import com.lib.domain.Category;
 import com.lib.domain.Loan;
 import com.lib.domain.User;
 import com.lib.dto.LoanDTO;
 import com.lib.dto.request.LoanRequest;
 import com.lib.dto.response.LibResponse;
 import com.lib.exception.BadRequestException;
+import com.lib.exception.ResourceNotFoundException;
 import com.lib.exception.message.ErrorMessage;
 import com.lib.mapper.LoanMapper;
 import com.lib.repository.LoanRepository;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 public class LoanService {
@@ -95,15 +96,29 @@ public class LoanService {
     }
 
 
-    public boolean existByBook(Book book) {
+    public LoanDTO getLoanDeatilsById(Long id) {
 
-        return loanRepository.existByBook(book);
+        Loan loan=getById(id);
+        return loanMapper.loanToLoanDTO(loan);
 
     }
 
-    public boolean existByCategory(Category category) {
+    private Loan getById(Long id) {
 
-        return loanRepository.existByCategory(category);
+       Loan loan= loanRepository.findById(id).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessage.LOAN_NOT_FOUND_MESSAGE,id)));
+       return loan;
 
+    }
+
+    public List<LoanDTO> getAllLoan() {
+
+       List<Loan>loanList= loanRepository.findAll();
+       return loanMapper.loanListToLoanDTOList(loanList);
+    }
+
+    public LoanDTO findByIdAndUser(Long id, User user) {
+       Loan loan= loanRepository.findUserById(id,user).orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_EXCEPTION, id)));
+       return loanMapper.loanToLoanDTO(loan);
     }
 }
