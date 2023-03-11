@@ -118,7 +118,12 @@ public class LoanService {
     }
 
     public LoanDTO findByIdAndUser(Long id, User user) {
-       Loan loan= loanRepository.findUserById(id,user).orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_EXCEPTION, id)));
+       Loan loan= loanRepository.findUserById(id,user).orElseThrow(
+               ()->new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_EXCEPTION, id)));
        return loanMapper.loanToLoanDTO(loan);
+    }
+    public Page<LoanDTO> getLoansByUserId(Long userId, Pageable pageable) {
+        Page<Loan> loanPage=loanRepository.findAll(pageable);
+        return loanPage.map(loan-> loanMapper.loanToLoanDTO(loan));
     }
 }

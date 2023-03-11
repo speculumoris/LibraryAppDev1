@@ -83,7 +83,7 @@ public class LoanController {
        return ResponseEntity.ok(loanDTOList);
     }
 
-    @PostMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<LoanDTO> loanDTOSAuthUser(@PathVariable Long id){
 
         User user=userService.getCurrentUser();
@@ -91,4 +91,20 @@ public class LoanController {
 
       return ResponseEntity.ok(loanDTO);
     }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<Page<LoanDTO>> getLoanByUserId(@RequestParam("userId") Long userId,
+                                                         @RequestParam("page") int page,
+                                                         @RequestParam("size") int size,
+                                                         @RequestParam("sort") String prop,//neye göre sıralanacağı belirtiliyor
+                                                         @RequestParam(value = "direction",
+                                                                 required = false, // direction required olmasın
+                                                                 defaultValue = "DESC") Sort.Direction direction) {
+        Pageable pageable=PageRequest.of(page, size,Sort.by(direction,prop));
+        Page<LoanDTO> loanDTOS=loanService.getLoansByUserId(userId,pageable);
+
+        return ResponseEntity.ok(loanDTOS);
+
+    }
+
 }
