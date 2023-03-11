@@ -1,6 +1,7 @@
 package com.lib.service;
 
 import com.lib.domain.Book;
+import com.lib.domain.Category;
 import com.lib.domain.ImageFile;
 import com.lib.dto.BookDTO;
 import com.lib.exception.BadRequestException;
@@ -26,6 +27,7 @@ public class BookService {
 
     private final LoanService loanService;
 
+
     public BookService(BookRepository bookRepository, ImageFileService imageFileService, BookMapper bookMapper, LoanService loanService) {
         this.bookRepository = bookRepository;
         this.imageFileService = imageFileService;
@@ -43,6 +45,7 @@ public class BookService {
     public void saveBook(String imageId, BookDTO bookDTO) {
 
         ImageFile imageFile = imageFileService.findImageById(imageId);
+
 
         Integer usedBookCount = bookRepository.findBookCountByImageId(imageFile.getId());
         if (usedBookCount > 0) {

@@ -1,9 +1,11 @@
 package com.lib.controller;
 
+import com.lib.domain.Category;
 import com.lib.dto.BookDTO;
 import com.lib.dto.response.LibResponse;
 import com.lib.dto.response.ResponseMessage;
 import com.lib.service.BookService;
+import com.lib.service.CategoryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +25,7 @@ public class BookController {
 
     private final BookService bookService;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, CategoryService categoryService) {
         this.bookService = bookService;
     }
 
