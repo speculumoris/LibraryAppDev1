@@ -39,7 +39,7 @@ public class UserUpdateRequest {
     @NotNull(message = "phone number cannot be null")
     private String phone;
 
-    @Pattern(regexp = "yyyy-MM-dd")
+
     @Column(nullable = false)
     private LocalDate birthDate;
 

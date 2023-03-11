@@ -99,20 +99,26 @@ public class UserService {
         User currentUser = getCurrentUser();
 
         Set<String> userStrRole = request.getRoles();
-
         Set<Role> roles = convertRoles(userStrRole);
 
 
+        Role role = roleService.findByType(RoleType.ROLE_MEMBER);
+        Set<Role> memberRole = new HashSet<>();
+        memberRole.add(role);
 
-        //currentUser.getRoles().equals(RoleType.ROLE_EMPLOYEE)
-        //&& !userStrRole.equals(RoleType.ROLE_MEMBER.getName())
-        //(currentUser.getRoles() != roleService.findByType(RoleType.ROLE_ADMIN)) &&
-//
-//        if(currentUser.getRoles().equals(RoleType.ROLE_EMPLOYEE)) {
-//                throw new ResourceNotFoundException(ErrorMessage.NOT_PERMITTED_METHOD_MESSAGE);
-//
-//        }
-
+        if(currentUser.getRoles() == null){
+            throw new ResourceNotFoundException(ErrorMessage.NOT_PERMITTED_METHOD_MESSAGE);
+        }else {
+            currentUser.getRoles().forEach(role1 -> {
+                if (role1.getRoleType().equals(RoleType.ROLE_ADMIN)) {
+                    user.setRoles(roles);
+                } else if (role1.getRoleType().equals(RoleType.ROLE_EMPLOYEE)) {
+                    user.setRoles(memberRole);
+                } else {
+                    throw new ResourceNotFoundException(ErrorMessage.NOT_PERMITTED_METHOD_MESSAGE);
+                }
+            });
+        }
 
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
@@ -122,11 +128,8 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setResetPasswordCode(sha256hex);
-        user.setRoles(roles);
-
         userRepository.save(user);
     }
-
 
 
     public void updateUser(Long id, UserUpdateRequest userUpdateRequest) {
@@ -163,8 +166,19 @@ public class UserService {
         // ADMIN TUM KULLANICILARI UPDATE EDER - EMPLOYEE ISE SADECE MEMBER'I UPDATE EDER
         User currentUser = getCurrentUser();
 
-        if(currentUser.getRoles().equals(RoleType.ROLE_EMPLOYEE) && !roles.equals(RoleType.ROLE_MEMBER) ){
-            throw new ResourceNotFoundException(ErrorMessage.UNAUTHRIZED_FOUND_MESSAGE);
+
+        if(currentUser.getRoles() == null){
+            throw new ResourceNotFoundException(ErrorMessage.NOT_PERMITTED_METHOD_MESSAGE);
+        }else {
+            currentUser.getRoles().forEach(role1 -> {
+                 if (role1.getRoleType().equals(RoleType.ROLE_EMPLOYEE)) {
+                     user.getRoles().forEach(role2 -> {
+                             if(! role2.getRoleType().equals(RoleType.ROLE_MEMBER)){
+                                 throw new ResourceNotFoundException(ErrorMessage.NOT_PERMITTED_METHOD_MESSAGE);
+                             }
+                         });
+                 }
+            });
         }
 
         user.setFirstName(userUpdateRequest.getFirstName());
@@ -174,9 +188,7 @@ public class UserService {
         user.setPhone(userUpdateRequest.getPhone());
         user.setBirthDate(userUpdateRequest.getBirthDate());
         user.setPassword(userUpdateRequest.getPassword());
-
-        Set<Role> role = convertRoles(userUpdateRequest.getRoles());
-        user.setRoles(role);
+        user.setRoles(roles);
 
         userRepository.save(user);
     }
