@@ -1,6 +1,7 @@
 package com.lib.service;
 
 import com.lib.domain.Book;
+import com.lib.domain.Category;
 import com.lib.domain.Loan;
 import com.lib.domain.User;
 import com.lib.dto.LoanDTO;
@@ -54,19 +55,24 @@ public class LoanService {
 
         Loan loan = loanMapper.loanRequestToLoan(loanRequest);
 
+        loan.setBook(book);
+        loan.setUser(user);
+        book.setActive(true);//beacuse the book on the loan
         if (returnDate.equals(expireDate) || returnDate.isBefore(expireDate)) {
             if (!(score > 2) && !(score < -2)) {
                 user.setScore(score + 1);
-            } else user.setScore(score - 1);
+            } else {
+                user.setScore(score - 1);
+            }
+            book.setActive(true);
 
         }
 
-        loan.setBook(book);
-        loan.setUser(user);
 
         loanRepository.save(loan);
     }
 
+    //Kitap geri döndü mü?
     //Kitap müsait mi?
     //Kitap kiralanabilir mi?
     //Kaç kitap alınacak?
@@ -120,5 +126,17 @@ public class LoanService {
     public LoanDTO findByIdAndUser(Long id, User user) {
        Loan loan= loanRepository.findUserById(id,user).orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_EXCEPTION, id)));
        return loanMapper.loanToLoanDTO(loan);
+    }
+
+    public boolean existByCategory(Category category) {
+
+        return loanRepository.existsByCategory(category);
+
+    }
+
+    public boolean existByBook(Book book) {
+
+        return loanRepository.existsByBook(book);
+
     }
 }
