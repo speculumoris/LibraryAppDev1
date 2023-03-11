@@ -60,7 +60,7 @@ public class UserService {
 
     public UserDTO getUserById(Long id) {
        User user = userRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION, id)));
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_EXCEPTION, id)));
 
        UserDTO userDTO = userMapper.userToUserDTO(user);
        return userDTO;
@@ -164,7 +164,7 @@ public class UserService {
     public User getById(Long id){
 
        User user = userRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION, id)));
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_EXCEPTION, id)));
        return user;
     }
 
@@ -218,7 +218,7 @@ public class UserService {
     public User getUserByEmail(String email) {
 
         User user = userRepository.findByEmail(email).orElseThrow(
-                ()->new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION, email)));
+                ()->new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_EXCEPTION, email)));
         return user;
     }
 

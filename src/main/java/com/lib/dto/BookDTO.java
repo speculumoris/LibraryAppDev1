@@ -43,6 +43,6 @@ public class BookDTO {
     private boolean featured;
 
     private LocalDateTime createDate;
-    private boolean builtIn;
+    private Boolean builtIn;
 
 }

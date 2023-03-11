@@ -1,5 +1,7 @@
 package com.lib.repository;
 
+import com.lib.domain.Book;
+import com.lib.domain.Category;
 import com.lib.domain.Loan;
 import com.lib.domain.User;
 import org.springframework.data.domain.Page;
@@ -23,4 +25,9 @@ public interface LoanRepository extends JpaRepository<Loan,Long> {
 
     @EntityGraph(attributePaths = {"book", "book.image","user"})
     Optional<Loan> findUserById(Long id, User user);
+
+    boolean existsByCategory(Category category);
+
+
+    boolean existsByBook(Book book);
 }
