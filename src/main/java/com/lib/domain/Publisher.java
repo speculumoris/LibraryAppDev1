@@ -33,7 +33,7 @@ public class Publisher {
     private Boolean builtIn = false;
 
     @JsonIgnore
-    @OneToMany
+    @OneToMany(mappedBy = "publisher")
     private List<Book> bookList;
 
 
