@@ -39,8 +39,6 @@ public class AdminCreateByUserRequest {
     @NotNull(message = "phone number cannot be null")
     private String phone;
 
-    @Pattern(regexp = "yyyy-MM-dd")
-    @Column(nullable = false)
     private LocalDate birthDate;
 
     @Email(message = "please provide valid email")
@@ -50,6 +48,9 @@ public class AdminCreateByUserRequest {
     @NotNull(message = "password cannot be null")
     private String password;
 
+
+    @NotNull(message = "password cannot be null")
+    private String resetPasswordCode;
     private Set<String> roles ;
 
 

@@ -1,6 +1,6 @@
 package com.lib.domain;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -33,10 +32,12 @@ public class Publisher {
 
     private Boolean builtIn = false;
 
+    @JsonIgnore
     @OneToMany
     private List<Book> bookList;
 
 
-    public void setImage(Set<ImageFile> imFiles) {
-    }
+
+
+
 }

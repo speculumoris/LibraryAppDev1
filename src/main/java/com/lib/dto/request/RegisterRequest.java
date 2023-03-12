@@ -1,17 +1,18 @@
 package com.lib.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 
 @Getter
 @Setter
@@ -36,7 +37,7 @@ public class RegisterRequest {
     @NotNull(message = "phone number cannot be null")
     private String phone;
 
-    @Pattern(regexp = "yyyy-MM-dd")
+
     private LocalDate birthDate;
 
     @Email(message = "please provide valid email")

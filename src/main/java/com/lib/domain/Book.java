@@ -10,7 +10,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -23,8 +22,6 @@ public class Book {
    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
 
     @NotNull(message = "Book name cannot be null")
     @Size(min = 2,max = 80,message = "Book name '${validateValue}' should be between {min} and {max}")
@@ -48,27 +45,23 @@ public class Book {
     @JoinColumn(name = "book__id")
     private List<ImageFile> imageFile;
 
-
     @NotNull(message = "ShelfCode cannot be null")
     @Column(length = 6)
     private String shelfCode;
 
-
     private boolean active=true;
     private boolean featured=false;
-
     private boolean loanable=true;
 
     @NotNull
+<<<<<<<<< Temporary merge branch 1
+    private LocalDateTime createDate;
+=========
     private LocalDateTime createDate = LocalDateTime.now();
 
 
-    private Boolean builtIn =false;
-
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name="car_id")
-    private Set<ImageFile> image;
-
+>>>>>>>>> Temporary merge branch 2
+    private boolean builtIn =false;
     @ManyToOne
     private Category category;
 

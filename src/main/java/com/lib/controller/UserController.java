@@ -1,7 +1,11 @@
 package com.lib.controller;
 
+
+import com.lib.domain.User;
+import com.lib.dto.LoanDTO;
 import com.lib.dto.UserDTO;
 import com.lib.dto.request.AdminCreateByUserRequest;
+import com.lib.dto.request.ResetPassword;
 import com.lib.dto.request.UserUpdateRequest;
 import com.lib.dto.response.LibResponse;
 import com.lib.dto.response.ResponseMessage;
@@ -18,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/user" )
+@RequestMapping
 public class UserController {
     private final UserService userService;
 
@@ -27,8 +31,8 @@ public class UserController {
     }
 
 
-    @GetMapping("/auth/pages")
- //   @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
+    @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
     public ResponseEntity<Page<UserDTO>> getAllUsersByPage(@RequestParam("page") int page,
                                                            @RequestParam("size") int size,
                                                            @RequestParam("sort") String prop,
@@ -44,7 +48,7 @@ public class UserController {
 
 
     @GetMapping("/users/{id}")
-    //   @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id){
 
         UserDTO userDTO = userService.getUserById(id);
@@ -53,8 +57,11 @@ public class UserController {
     }
 
 
+
+
+
     @PostMapping("/users")
-    //   @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
     public ResponseEntity<LibResponse> UserCreatedByAdmin(@Valid @RequestBody AdminCreateByUserRequest request){
 
         userService.UserCreatedByAdmin(request);
@@ -66,7 +73,7 @@ public class UserController {
 
 
     @PutMapping("/users/{id}")
-    //   @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
     public ResponseEntity<LibResponse> updateUser(@PathVariable Long id,
                                                   @Valid @RequestBody UserUpdateRequest userUpdateRequest){
 
@@ -81,7 +88,7 @@ public class UserController {
 
 
     @DeleteMapping("/users/{id}")
-    //   @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<LibResponse> deleteUser(@PathVariable Long id){
 
         userService.deleteUser(id);
@@ -94,10 +101,6 @@ public class UserController {
     }
 
 
-    /// authenticated user  currentUser methodu yazilacak
-
-
-    // Sisteme giris yapan kullanici bilgisi
     @GetMapping("/user")
     @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE') or hasRole('MEMBER')")
     public ResponseEntity<UserDTO> getUser() {
@@ -107,6 +110,36 @@ public class UserController {
     }
 
 
+    @GetMapping("/user/loans")
+    public ResponseEntity<Page<LoanDTO>> getAllUsersLoans(@RequestParam("page") int page,
+                                                          @RequestParam("size") int size,
+                                                          @RequestParam("sort") String prop,
+                                                          @RequestParam(value = "direction",
+                                                                   required = false, defaultValue = "DESC")
+                                                           Sort.Direction direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, prop));
+
+        User user =  userService.getCurrentUser();
+
+        Page<LoanDTO> loanDTOs = userService.getAllUsersLoans(user, pageable);
+
+        return ResponseEntity.ok(loanDTOs);
+    }
+
+
+    // Password reset
+    @PatchMapping("/user/resetpassword")
+    public ResponseEntity<LibResponse> resetPassword(@Valid @RequestBody ResetPassword resetPassword){
+
+        userService.resetPassword(resetPassword);
+
+        LibResponse response = new LibResponse();
+        response.setMessage(ResponseMessage.USER_PASSWORD_UPDATE_RESPONSE_MESSAGE);
+        response.setSuccess(true);
+
+        return ResponseEntity.ok(response);
+
+    }
 
 
 
