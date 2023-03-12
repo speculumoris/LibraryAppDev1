@@ -2,7 +2,6 @@ package com.lib.controller;
 
 import com.lib.domain.Book;
 import com.lib.domain.User;
-import com.lib.dto.BookDTO;
 import com.lib.dto.LoanDTO;
 import com.lib.dto.request.LoanRequest;
 import com.lib.dto.response.LibResponse;
@@ -59,7 +58,7 @@ public class LoanController {
 
         loanService.createLoan(loanRequest,user,book);
 
-        LibResponse libResponse=new LibResponse(ResponseMessage.LOAN_CREATED_RESPONSE,true);
+        LibResponse libResponse=new LibResponse(ResponseMessage.LOAN_CREATED_RESPONSE_MESSAGE,true);
 
         return new ResponseEntity<>(libResponse, HttpStatus.CREATED);
 
@@ -101,9 +100,25 @@ public class LoanController {
                                                                  required = false, // direction required olmasın
                                                                  defaultValue = "DESC") Sort.Direction direction) {
         Pageable pageable=PageRequest.of(page, size,Sort.by(direction,prop));
-        Page<LoanDTO> loanDTOS=loanService.getLoansByUserId(userId,pageable);
+        User user = userService.getById(userId);
+        Page<LoanDTO> loanDTOS=loanService.getLoansByUserId(user,pageable);
 
         return ResponseEntity.ok(loanDTOS);
+
+    }
+
+    @PutMapping
+    public ResponseEntity<LibResponse> updateLoan(@RequestParam("loanId") Long loanId,
+                                                  @RequestParam("bookId") Long bookId,
+                                                  @RequestParam LoanRequest loanRequest){
+        Book book=bookService.getBookById(bookId);
+        User user =userService.getCurrentUser();
+        loanService.updateLoan(loanId,book,loanRequest,user);
+
+        LibResponse libResponse=new LibResponse(ResponseMessage.LOAN_UPDATE_RESPONSE_MESSAGE,true);
+
+        return ResponseEntity.ok(libResponse);
+
 
     }
 

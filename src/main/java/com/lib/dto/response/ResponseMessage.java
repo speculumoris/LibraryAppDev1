@@ -59,6 +59,8 @@ public class ResponseMessage {
     public static final String CATEGORY_DELETED_RESPONSE_MESSAGE = "Category succesfully deleted";
     public static final String IMAGE_DELETED_RESPONSE_MESSAGE = "ImageFile succesfully deleted";
     public static final String IMAGE_SAVED_RESPONSE_MESSAGE = "ImageFile succesfully saved";
+    public static final String LOAN_CREATED_RESPONSE_MESSAGE = "Loan succesfully created";
 
 
+    public static final String LOAN_UPDATE_RESPONSE_MESSAGE = "Loan succesfully updated";
 }

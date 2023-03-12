@@ -20,7 +20,7 @@ public interface LoanRepository extends JpaRepository<Loan,Long> {
     @EntityGraph(attributePaths = {"book","book.image"})
     Page<Loan> findAll(Pageable pageable);
 
-    @EntityGraph(attributePaths = {"car", "car.image","user"})
+    @EntityGraph(attributePaths = {"book", "book.image","user"})
     Optional<Loan> findById(Long id);
 
     @EntityGraph(attributePaths = {"book", "book.image","user"})
@@ -28,6 +28,7 @@ public interface LoanRepository extends JpaRepository<Loan,Long> {
 
     boolean existsByCategory(Category category);
 
-
     boolean existsByBook(Book book);
+    @EntityGraph(attributePaths = {"book", "book.image","user"})
+    Page<Loan> findAllByUser(User user, Pageable pageable);
 }
