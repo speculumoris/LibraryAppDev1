@@ -25,11 +25,16 @@ public interface BookMapper {
             @Mapping(source="categoryId", target = "category"),
             @Mapping(source="publisherId", target = "publisher"),
             @Mapping(source="authorId", target="author"),
-            @Mapping(source = "imageFile",target = "imageFile",qualifiedByName = "getImageAsString")
+            @Mapping(source = "imageFile",target = "imageFile")
     })
     Book bookDTOToBook(BookDTO bookDTO);
+    @Mappings({
 
-    @Mapping(source = "imageFile",target = "imageFile",qualifiedByName = "getImageAsString")
+            @Mapping(source="category", target = "categoryId"),
+            @Mapping(source="publisher", target = "publisherId"),
+            @Mapping(source="author", target="authorId"),
+            @Mapping(source = "imageFile",target = "imageFile",qualifiedByName = "getImageAsString")
+    })
     BookDTO bookToBookDTO(Book book);
 
     @Named("getImageAsString")
@@ -43,6 +48,7 @@ public interface BookMapper {
 
         return imgs;
     }
+
 
 
 
