@@ -10,7 +10,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @AllArgsConstructor
-@Getter@Setter
+@Getter
+@Setter
 @NoArgsConstructor
 public class BookRequest {
 
