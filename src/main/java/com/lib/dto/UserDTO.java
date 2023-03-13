@@ -1,10 +1,12 @@
 package com.lib.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lib.domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.context.annotation.PropertySource;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +21,8 @@ import java.util.Set;
 public class UserDTO {
 
     private Long id;
+
+
     private String firstName;
     private String lastName;
 
