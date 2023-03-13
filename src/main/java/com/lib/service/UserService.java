@@ -166,6 +166,8 @@ public class UserService {
         // ADMIN TUM KULLANICILARI UPDATE EDER - EMPLOYEE ISE SADECE MEMBER'I UPDATE EDER
         User currentUser = getCurrentUser();
 
+        Role admin = roleService.findByType(RoleType.ROLE_ADMIN);
+        Role employee = roleService.findByType(RoleType.ROLE_EMPLOYEE);
 
         if(currentUser.getRoles() == null){
             throw new ResourceNotFoundException(ErrorMessage.NOT_PERMITTED_METHOD_MESSAGE);
@@ -173,7 +175,9 @@ public class UserService {
             currentUser.getRoles().forEach(role1 -> {
                  if (role1.getRoleType().equals(RoleType.ROLE_EMPLOYEE)) {
                      user.getRoles().forEach(role2 -> {
-                             if(! role2.getRoleType().equals(RoleType.ROLE_MEMBER)){
+                             if(! role2.getRoleType().equals(RoleType.ROLE_MEMBER)
+                                     || userStrRoles.contains(admin.getRoleType().getName())
+                                     || userStrRoles.contains(employee.getRoleType().getName())){
                                  throw new ResourceNotFoundException(ErrorMessage.NOT_PERMITTED_METHOD_MESSAGE);
                              }
                          });
@@ -283,6 +287,7 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
 
 
+
         String sha256hex = Hashing.sha256()
                 .hashString(registerRequest.getResetPasswordCode(), StandardCharsets.UTF_8)
                 .toString();
@@ -360,6 +365,32 @@ public class UserService {
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION, id)));
         return user;
     }
+
+
+    public void updatePassword(ResetPassword updatePassword) {
+
+        User user = getCurrentUser();
+
+        if(user.isBuiltIn()){
+            throw new BadRequestException(ErrorMessage.NOT_PERMITTED_METHOD_MESSAGE);
+        }
+
+        // form kismina girilen oldPassword dogrumu
+
+        if(!passwordEncoder.matches(updatePassword.getResetPasswordCode(), user.getPassword())){
+            throw new BadRequestException(ErrorMessage.PASSWORD_NOT_FOUNT_EXCEPTION);
+        }
+
+        // yeni gelen sifre encode edildi
+
+        String hashedPassword = passwordEncoder.encode(updatePassword.getNewPassword());
+
+        user.setPassword(hashedPassword);
+
+        userRepository.save(user);
+    }
+
+
 
 
 }

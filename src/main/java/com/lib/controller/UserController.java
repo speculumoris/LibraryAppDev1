@@ -129,6 +129,7 @@ public class UserController {
 
     // Password reset
     @PatchMapping("/user/resetpassword")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE') or hasRole('MEMBER')")
     public ResponseEntity<LibResponse> resetPassword(@Valid @RequestBody ResetPassword resetPassword){
 
         userService.resetPassword(resetPassword);
@@ -141,6 +142,18 @@ public class UserController {
 
     }
 
+    // Update Password
+    @PatchMapping("/user/updatepassword")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE') or hasRole('MEMBER')")
+    public ResponseEntity<LibResponse> updatePassword(@Valid  @RequestBody ResetPassword updatePassword){
+
+        userService.updatePassword(updatePassword);
+        LibResponse response = new LibResponse();
+        response.setMessage(ResponseMessage.USER_PASSWORD_UPDATE_RESPONSE_MESSAGE);
+        response.setSuccess(true);
+
+        return ResponseEntity.ok(response);
+    }
 
 
 
