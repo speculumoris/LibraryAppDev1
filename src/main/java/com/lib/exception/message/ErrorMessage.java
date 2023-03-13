@@ -23,4 +23,5 @@ public class ErrorMessage {
     public final static String BOOK_USED_MESSAGE = "Book is used by another category";
     public final static String CATEGORY_USED_BY_LOAN_MESSAGE = "Category couldn't be deleted. Category is used by a loan";
     public final static String BOOK_USED_BY_LOAN_MESSAGE = "Book couldn't be deleted. Book is used by a loan";
+    public static final String PASSWORD_NOT_FOUND_EXCEPTION = "Password not found";
 }

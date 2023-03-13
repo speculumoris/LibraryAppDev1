@@ -47,5 +47,9 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
     @EntityGraph(attributePaths = {"book", "book.image"})
     Page<Loan> findAllByBook(Book book, Pageable pageable);
 
+    boolean existsByUser(User user);
+
+    List<Loan> findAllByUserId(Long id);
+
 }
 

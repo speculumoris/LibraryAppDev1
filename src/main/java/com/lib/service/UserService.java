@@ -74,7 +74,7 @@ public class UserService {
 
     public UserDTO getUserById(Long id) {
        User user = userRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION, id)));
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_EXCEPTION, id)));
 
        UserDTO userDTO = userMapper.userToUserDTO(user);
        return userDTO;
@@ -202,7 +202,7 @@ public class UserService {
     public User getById(Long id){
 
        User user = userRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION, id)));
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_EXCEPTION, id)));
        return user;
     }
 
@@ -264,7 +264,7 @@ public class UserService {
     public User getUserByEmail(String email) {
 
         User user = userRepository.findByEmail(email).orElseThrow(
-                ()->new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION, email)));
+                ()->new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_EXCEPTION, email)));
         return user;
     }
 
@@ -338,7 +338,7 @@ public class UserService {
 
         User user = userRepository.findByEmail(resetPassword.getEmail()).orElseThrow(()->
                 new ResourceNotFoundException(
-                        String.format(ErrorMessage.RESOURSE_NOT_FOUNT_EXCEPTION, resetPassword.getEmail())));
+                        String.format(ErrorMessage.RESOURCE_NOT_FOUND_EXCEPTION, resetPassword.getEmail())));
 
 
       //  String encodePassword = passwordEncoder.encode(resetPassword.getResetPasswordCode());
@@ -348,7 +348,7 @@ public class UserService {
                 .toString();
 
         if(!sha256hex.equals(user.getResetPasswordCode())){
-            throw new BadRequestException(ErrorMessage.PASSWORD_NOT_FOUNT_EXCEPTION);
+            throw new BadRequestException(ErrorMessage.PASSWORD_NOT_FOUND_EXCEPTION);
         }
 
         String newPassword = passwordEncoder.encode(resetPassword.getNewPassword());
@@ -362,7 +362,7 @@ public class UserService {
     public User userById(Long id) {
 
        User user = userRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION, id)));
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_EXCEPTION, id)));
         return user;
     }
 
@@ -378,7 +378,7 @@ public class UserService {
         // form kismina girilen oldPassword dogrumu
 
         if(!passwordEncoder.matches(updatePassword.getResetPasswordCode(), user.getPassword())){
-            throw new BadRequestException(ErrorMessage.PASSWORD_NOT_FOUNT_EXCEPTION);
+            throw new BadRequestException(ErrorMessage.PASSWORD_NOT_FOUND_EXCEPTION);
         }
 
         // yeni gelen sifre encode edildi
