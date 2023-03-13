@@ -1,10 +1,6 @@
 package com.lib.dto.request;
 
 
-
-
-
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +14,6 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class BookRequest {
 
-
     @NotNull(message = "Book name cannot be null")
     @Size(min = 2,max = 80,message = "Book name '${validateValue}' should be between {min} and {max}")
     private String name;
@@ -31,7 +26,6 @@ public class BookRequest {
     private Long authorId;
     @NotNull(message = "Publisher cannot be null")
     private Long publisherId;
-
 
 
     private Integer publishDate;
