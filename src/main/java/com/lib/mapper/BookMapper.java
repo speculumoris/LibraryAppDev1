@@ -1,8 +1,8 @@
 package com.lib.mapper;
 
-import com.lib.domain.Book;
-import com.lib.domain.ImageFile;
+import com.lib.domain.*;
 import com.lib.dto.BookDTO;
+import com.lib.dto.request.BookRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -17,39 +17,52 @@ import java.util.stream.Collectors;
 public interface BookMapper {
 
 
-    @Mapping(target = "image",ignore = true)
+    @Mapping(target = "image", ignore = true)
     List<BookDTO> map(List<Book> bookList);
 
-    @Mappings({
 
-            @Mapping(source="categoryId", target = "category"),
-            @Mapping(source="publisherId", target = "publisher"),
-            @Mapping(source="authorId", target="author"),
-            @Mapping(source = "imageFile",target = "imageFile")
-    })
-    Book bookDTOToBook(BookDTO bookDTO);
-    @Mappings({
+    Book bookRequestToBook(BookRequest bookRequest);
 
-            @Mapping(source="category", target = "categoryId"),
-            @Mapping(source="publisher", target = "publisherId"),
-            @Mapping(source="author", target="authorId"),
-            @Mapping(source = "imageFile",target = "imageFile",qualifiedByName = "getImageAsString")
-    })
+
+    @Mapping(source = "category", target = "categoryId", qualifiedByName = "getCategoryId")
+    @Mapping(source = "publisher", target = "publisherId", qualifiedByName = "getPublisherId")
+    @Mapping(source = "author", target = "authorId", qualifiedByName = "getAuthorId")
+    @Mapping(source = "imageFile", target = "imageFile", qualifiedByName = "getImageAsString")
     BookDTO bookToBookDTO(Book book);
 
+
+    @Mapping(source = "category", target = "categoryId", qualifiedByName = "getCategoryId")
+    @Mapping(source = "publisher", target = "publisherId", qualifiedByName = "getPublisherId")
+    @Mapping(source = "author", target = "authorId", qualifiedByName = "getAuthorId")
+    @Mapping(source = "imageFile", target = "imageFile", qualifiedByName = "getImageAsString")
+    Book bookDTOToBook(BookDTO bookDTO);
+
+
     @Named("getImageAsString")
-    public static Set<String> getImageIds(Set<ImageFile> imageFiles){
+    public static Set<String> getImageIds(Set<ImageFile> imageFiles) {
 
         Set<String> imgs = new HashSet<>();
 
         imgs = imageFiles.stream().
-                map(imFile-> imFile.getId().toString()).
+                map(imFile -> imFile.getId().toString()).
                 collect(Collectors.toSet());
 
         return imgs;
     }
 
+    @Named("getCategoryId")
+    public static Long getCategoryId(Category category) {
+        return category.getId();
+    }
 
+    @Named("getPublisherId")
+    public static Long getPublisherId(Publisher publisher) {
+        return publisher.getId();
+    }
 
+    @Named("getAuthorId")
+    public static Long getAuthorId(Author author) {
+        return author.getId();
+    }
 
 }

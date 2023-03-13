@@ -46,7 +46,7 @@ public class BookDTO {
     private LocalDateTime createDate;
     private Boolean builtIn;
 
-    private Set<String> image;
+
 
 
 }
