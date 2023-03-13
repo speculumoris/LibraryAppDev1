@@ -1,7 +1,9 @@
 package com.lib.controller;
 
-import com.lib.domain.Category;
+import com.lib.domain.Book;
 import com.lib.dto.BookDTO;
+import com.lib.dto.CategoryDTO;
+import com.lib.dto.request.BookRequest;
 import com.lib.dto.response.LibResponse;
 import com.lib.dto.response.ResponseMessage;
 import com.lib.service.BookService;
@@ -25,8 +27,11 @@ public class BookController {
 
     private final BookService bookService;
 
-    public BookController(BookService bookService, CategoryService categoryService) {
+    private final CategoryService categoryService;
+
+    public BookController(BookService bookService, CategoryService categoryService, CategoryService categoryService1) {
         this.bookService = bookService;
+        this.categoryService = categoryService;
     }
 
     @PostMapping("/admin/{imageId}/add")
@@ -77,6 +82,18 @@ public class BookController {
         return ResponseEntity.ok(bookDTO);
 
     }
+
+    @GetMapping("/visitors/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER') or hasRole('AUTHOR') or hasRole('LOAN') or hasRole('PUBLİSHER')")
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id){
+
+        CategoryDTO categoryDTO = categoryService.findByBookId(id);
+
+        return ResponseEntity.ok(categoryDTO);
+
+    }
+
+
 
     @PutMapping("/admin/auth")
     @PreAuthorize("hasRole('ADMIN')")

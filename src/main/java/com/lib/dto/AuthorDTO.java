@@ -13,5 +13,5 @@ public class AuthorDTO {
 
     private Long id;
     private String name;
-    private boolean builtIn =false;
+    private Boolean builtIn =false;
 }
