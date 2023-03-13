@@ -15,7 +15,7 @@ public interface CategoryMapper {
 
     Category categoryDTOToCategory(CategoryDTO categoryDTO);
 
-    @Mapping(source = "book",target = "book",qualifiedByName = "getBookAsString")
+//    @Mapping(source = "book",target = "book",qualifiedByName = "getBookId")
     CategoryDTO categoryToCategoryDTO(Category category);
 
 

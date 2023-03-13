@@ -45,7 +45,7 @@ public class Book {
 
     @Pattern(regexp = "^\\s{2}-\\d{3}$")
     @OneToMany(orphanRemoval = true)
-    @JoinColumn(name = "book__id")
+    @JoinColumn(name = "book_id")
     private List<ImageFile> imageFile;
 
 
@@ -66,17 +66,21 @@ public class Book {
     private Boolean builtIn =false;
 
     @OneToMany(orphanRemoval = true)
-    @JoinColumn(name="car_id")
+    @JoinColumn(name="book_id")
     private Set<ImageFile> image;
 
     @ManyToOne
+//    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
     @ManyToOne
+//    @JoinColumn(name = "publisher_id", referencedColumnName = "id")
     private Publisher publisher;
 
     @ManyToOne
+//    @JoinColumn(name = "author_id", referencedColumnName = "id")
     private Author author;
+
 
 
 

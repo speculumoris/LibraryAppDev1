@@ -27,8 +27,10 @@ public class BookRequest {
     private String isbn;
 
     private Integer pageCount;
+
     @NotNull(message = "Author cannot be null")
     private Long authorId;
+
     @NotNull(message = "Publisher cannot be null")
     private Long publisherId;
 

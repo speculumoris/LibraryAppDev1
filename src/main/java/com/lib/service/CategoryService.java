@@ -28,12 +28,18 @@ public class CategoryService {
 
     private final LoanService loanService;
 
+    private final PublisherService publisherService;
 
-    public CategoryService(CategoryRepository categoryRepository, BookService bookService, CategoryMapper categoryMapper, LoanService loanService) {
+    private final AuthorService authorService;
+
+
+    public CategoryService(CategoryRepository categoryRepository, BookService bookService, CategoryMapper categoryMapper, LoanService loanService, PublisherService publisherService, AuthorService authorService) {
         this.categoryRepository = categoryRepository;
         this.bookService = bookService;
         this.categoryMapper = categoryMapper;
         this.loanService = loanService;
+        this.publisherService = publisherService;
+        this.authorService = authorService;
     }
 
 
@@ -90,6 +96,7 @@ public class CategoryService {
 
     }
 
+
     public void updateCategory(Long id, Long bookId, CategoryDTO categoryDTO) {
 
         Category category = getCategory(id);
@@ -131,6 +138,14 @@ public class CategoryService {
         }
 
         categoryRepository.delete(category);
+
+    }
+
+    public CategoryDTO findByBookId(Long id) {
+
+        Category category = getCategory(id);
+
+        return categoryMapper.categoryToCategoryDTO(category);
 
     }
 }
