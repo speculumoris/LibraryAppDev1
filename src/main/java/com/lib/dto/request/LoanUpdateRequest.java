@@ -1,7 +1,8 @@
 package com.lib.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
+import com.lib.domain.Book;
+import com.lib.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,11 +13,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-@AllArgsConstructor@NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-public class LoanRequest {
-
+public class LoanUpdateRequest {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy HH:mm:ss")
     @NotNull(message="Please provide loan date of the book")
     private LocalDateTime loanDate;
@@ -29,9 +30,12 @@ public class LoanRequest {
     @Column(nullable = false)
     private LocalDateTime returnDate;
 
+    private Book book;
+
+    private User user;
+
     @Column(nullable = false)
     @Size(max = 300)
     private String notes;
-
 
 }

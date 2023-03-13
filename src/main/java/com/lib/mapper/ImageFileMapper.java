@@ -13,10 +13,7 @@ public interface ImageFileMapper {
     @Mapping(target = "book",ignore = true)
     List<ImageFileDTO> map(List<ImageFile> imageFileList);
 
-    ImageFile imageFileDTOToImageFile(ImageFileDTO imageFileDTO);
 
-    @Mapping(source = "book",target = "book",qualifiedByName = "getBookAsString")
-    ImageFileDTO imageFileToImageFileDTO(ImageFile imageFile);
 
 
 

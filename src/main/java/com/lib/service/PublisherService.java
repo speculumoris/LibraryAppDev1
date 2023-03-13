@@ -68,7 +68,7 @@ public class PublisherService {
         //!!! image bilgisini Publisher a ekliyoruz
         Set<ImageFile> imFiles = new HashSet<>();
         imFiles.add(imageFile);
-        publisher.setImage(imFiles);
+        //publisher.setImageFile(imFiles);
         publisherRepository.save(publisher);
 
 

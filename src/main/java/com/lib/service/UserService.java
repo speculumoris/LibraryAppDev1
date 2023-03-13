@@ -3,6 +3,7 @@ package com.lib.service;
 import com.lib.domain.Role;
 import com.lib.domain.User;
 import com.lib.domain.enums.RoleType;
+import com.lib.dto.LoanDTO;
 import com.lib.dto.UserDTO;
 import com.lib.dto.request.AdminCreateByUserRequest;
 import com.lib.dto.request.RegisterRequest;
@@ -52,32 +53,32 @@ public class UserService {
     }
 
 
-    private Page<UserDTO> getUserDTOPage(Page<User> userPage){
+    private Page<UserDTO> getUserDTOPage(Page<User> userPage) {
         return userPage.map(
                 user -> userMapper.userToUserDTO(user)
         );
     }
 
     public UserDTO getUserById(Long id) {
-       User user = userRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION, id)));
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_EXCEPTION, id)));
 
-       UserDTO userDTO = userMapper.userToUserDTO(user);
-       return userDTO;
+        UserDTO userDTO = userMapper.userToUserDTO(user);
+        return userDTO;
     }
 
 
-    public void UserCreatedByAdmin( AdminCreateByUserRequest request) {
+    public void UserCreatedByAdmin(AdminCreateByUserRequest request) {
 
 
         User user = new User();
         boolean exists = userRepository.existsByEmail(request.getEmail());
 
-        if(exists){
+        if (exists) {
             throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE, request.getEmail()));
         }
 
-        if(request.getPassword() != null){
+        if (request.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
 
@@ -94,8 +95,8 @@ public class UserService {
 
         User currentUser = getCurrentUser();
 
-        if(currentUser.getRoles().equals(RoleType.ROLE_EMPLOYEE)){
-            if(!roles.equals(RoleType.ROLE_MEMBER)){
+        if (currentUser.getRoles().equals(RoleType.ROLE_EMPLOYEE)) {
+            if (!roles.equals(RoleType.ROLE_MEMBER)) {
                 throw new ResourceNotFoundException(ErrorMessage.UNAUTHRIZED_FOUND_MESSAGE);
             }
         }
@@ -106,31 +107,30 @@ public class UserService {
     }
 
 
-
     public void updateUser(Long id, UserUpdateRequest userUpdateRequest) {
 
         User user = getById(id);
 
         // builtIn control
-        if(user.isBuiltIn()){
+        if (user.isBuiltIn()) {
             throw new BadRequestException(ErrorMessage.NOT_PERMITTED_METHOD_MESSAGE);
         }
 
         // email control
         boolean emailExist = userRepository.existsByEmail(userUpdateRequest.getEmail());
 
-        if(emailExist && !userUpdateRequest.getEmail().equals(user.getEmail())){
+        if (emailExist && !userUpdateRequest.getEmail().equals(user.getEmail())) {
             throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE,
                     userUpdateRequest.getEmail()));
         }
 
 
         // password control
-        if(userUpdateRequest.getPassword() == null){
+        if (userUpdateRequest.getPassword() == null) {
             userUpdateRequest.setPassword(user.getPassword());
-        }else{
-           String encodedPassword = passwordEncoder.encode(userUpdateRequest.getPassword());
-             userUpdateRequest.setPassword(encodedPassword);
+        } else {
+            String encodedPassword = passwordEncoder.encode(userUpdateRequest.getPassword());
+            userUpdateRequest.setPassword(encodedPassword);
         }
 
 
@@ -141,7 +141,7 @@ public class UserService {
         // ADMIN TUM KULLANICILARI UPDATE EDER - EMPLOYEE ISE SADECE MEMBER'I UPDATE EDER
         User currentUser = getCurrentUser();
 
-        if(currentUser.getRoles().equals(RoleType.ROLE_EMPLOYEE) && !roles.equals(RoleType.ROLE_MEMBER) ){
+        if (currentUser.getRoles().equals(RoleType.ROLE_EMPLOYEE) && !roles.equals(RoleType.ROLE_MEMBER)) {
             throw new ResourceNotFoundException(ErrorMessage.UNAUTHRIZED_FOUND_MESSAGE);
         }
 
@@ -160,32 +160,30 @@ public class UserService {
     }
 
 
+    public User getById(Long id) {
 
-    public User getById(Long id){
-
-       User user = userRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION, id)));
-       return user;
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_EXCEPTION, id)));
+        return user;
     }
 
 
-
     // Request den gelen String rolleri ROLE_TYPE cevirme
-    private Set<Role> convertRoles(Set<String> pRoles){
+    private Set<Role> convertRoles(Set<String> pRoles) {
         Set<Role> roles = new HashSet<>();
 
-        if(pRoles==null){
+        if (pRoles == null) {
             Role userRole = roleService.findByType(RoleType.ROLE_MEMBER);
             roles.add(userRole);
-        }else {
-            pRoles.forEach(roleStr->{
-                if(roleStr.equals(RoleType.ROLE_ADMIN.getName())){
+        } else {
+            pRoles.forEach(roleStr -> {
+                if (roleStr.equals(RoleType.ROLE_ADMIN.getName())) {
                     Role adminRole = roleService.findByType(RoleType.ROLE_ADMIN);
                     roles.add(adminRole);
-                }else if(roleStr.equals(RoleType.ROLE_EMPLOYEE.getName())){
+                } else if (roleStr.equals(RoleType.ROLE_EMPLOYEE.getName())) {
                     Role employeeRole = roleService.findByType(RoleType.ROLE_EMPLOYEE);
                     roles.add(employeeRole);
-                }else{
+                } else {
                     Role userRole = roleService.findByType(RoleType.ROLE_MEMBER);
                     roles.add(userRole);
                 }
@@ -200,15 +198,14 @@ public class UserService {
 
         boolean builtIn = user.isBuiltIn();
 
-        if(builtIn){
+        if (builtIn) {
             throw new BadRequestException(ErrorMessage.NOT_PERMITTED_METHOD_MESSAGE);
         }
 
-            // member in emanette kitabi var mi kontrol edilecek
+        // member in emanette kitabi var mi kontrol edilecek
 
-                    //   !!!!!!
-                    //    !!!
-
+        //   !!!!!!
+        //    !!!
 
 
         userRepository.delete(user);
@@ -218,7 +215,7 @@ public class UserService {
     public User getUserByEmail(String email) {
 
         User user = userRepository.findByEmail(email).orElseThrow(
-                ()->new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUNT_EXCEPTION, email)));
+                () -> new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_EXCEPTION, email)));
         return user;
     }
 
@@ -226,7 +223,7 @@ public class UserService {
 
 
         // email daha once kullanildi mi
-        if(userRepository.existsByEmail(registerRequest.getEmail())){
+        if (userRepository.existsByEmail(registerRequest.getEmail())) {
             throw new ClassCastException(
                     String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE, registerRequest.getEmail()));
         }
@@ -260,31 +257,21 @@ public class UserService {
     }
 
 
-<<<<<<<<< Temporary merge branch 1
-    public User getCurrentUser() {
-
-        String email=SecurityUtils.getCurrentUserLogin().orElseThrow(()->
-                new ResourceNotFoundException(ErrorMessage.PRINCIPAL_FOUND_MESSAGE));
-=========
     // Sisteme giris yapan kullanici bilgisi
     public UserDTO getPrincipal() {
 
         User user = getCurrentUser();
-        UserDTO userDTO= userMapper.userToUserDTO(user);
+        UserDTO userDTO = userMapper.userToUserDTO(user);
         return userDTO;
     }
 
-    public User getCurrentUser(){
-        String email = SecurityUtils.getCurrentUserLogin().orElseThrow(()->
+    public User getCurrentUser() {
+        String email = SecurityUtils.getCurrentUserLogin().orElseThrow(() ->
                 new ResourceNotFoundException(ErrorMessage.PRINCIPAL_FOUND_MESSAGE));
         User user = getUserByEmail(email);
 
         return user;
     }
->>>>>>>>> Temporary merge branch 2
 
-        User user=getUserByEmail(email);
-        return user;
 
-    }
 }

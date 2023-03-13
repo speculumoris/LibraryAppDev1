@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -34,7 +35,7 @@ public class BookDTO {
     private Integer publishDate;
     private Long categoryId;
 
-    private ImageFile imageFile;
+    private Set<String> imageFile;
     private boolean loanable;
 
     private String shelfCode;

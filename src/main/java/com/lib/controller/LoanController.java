@@ -4,6 +4,7 @@ import com.lib.domain.Book;
 import com.lib.domain.User;
 import com.lib.dto.LoanDTO;
 import com.lib.dto.request.LoanRequest;
+import com.lib.dto.request.LoanUpdateRequest;
 import com.lib.dto.response.LibResponse;
 import com.lib.dto.response.ResponseMessage;
 import com.lib.service.BookService;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -36,7 +38,7 @@ public class LoanController {
         this.bookService = bookService;
     }
 
-    @GetMapping
+    @GetMapping//http://localhost:8080/loan page
     public ResponseEntity<Page<LoanDTO>> getAllLoanWithPage( @RequestParam("page") int page,
                                                              @RequestParam("size") int size,
                                                              @RequestParam("sort") String prop,//neye göre sıralanacağı belirtiliyor
@@ -49,7 +51,7 @@ public class LoanController {
         return ResponseEntity.ok(pageLoanDTO);
     }
 
-    @PostMapping
+    @PostMapping//CreateOk
     public ResponseEntity<LibResponse> createLoan(@RequestParam Long bookId,
                                                   @Valid @RequestBody LoanRequest loanRequest){
 
@@ -66,7 +68,7 @@ public class LoanController {
 
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/{id}")//2.ok
     public ResponseEntity<LoanDTO> getLoanById(@PathVariable Long id){
 
         LoanDTO loan=loanService.getLoanDeatilsById(id);
@@ -78,7 +80,6 @@ public class LoanController {
     public ResponseEntity<List<LoanDTO>> getAllLoanDTO(){
 
        List<LoanDTO> loanDTOList= loanService.getAllLoan();
-
        return ResponseEntity.ok(loanDTOList);
     }
 
@@ -110,16 +111,33 @@ public class LoanController {
     @PutMapping
     public ResponseEntity<LibResponse> updateLoan(@RequestParam("loanId") Long loanId,
                                                   @RequestParam("bookId") Long bookId,
-                                                  @RequestParam LoanRequest loanRequest){
+                                                  @RequestParam LoanUpdateRequest loanUpdateRequest){
         Book book=bookService.getBookById(bookId);
         User user =userService.getCurrentUser();
-        loanService.updateLoan(loanId,book,loanRequest,user);
+        loanService.updateLoan(loanId,book,loanUpdateRequest,user);
 
         LibResponse libResponse=new LibResponse(ResponseMessage.LOAN_UPDATE_RESPONSE_MESSAGE,true);
 
         return ResponseEntity.ok(libResponse);
 
 
+    }
+    @GetMapping("/loan/{id}")//loans/loan/id=3
+    public ResponseEntity<LoanDTO> loanWıthId(@RequestParam("id")Long id){
+        LoanDTO loanDTO=loanService.getLoanDeatilsById(id);
+        return ResponseEntity.ok(loanDTO);
+    }
+
+    @GetMapping("/book/{bookId}")
+    public ResponseEntity<Page<LoanDTO>> loanWıthId(@PathVariable Long bookId,
+                                                    @RequestParam ("page") int page,
+                                                    @RequestParam("size") int size,
+                                                    @RequestParam("sort") String prop,
+                                                    @RequestParam("direction") Sort.Direction direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, prop));
+        Page<LoanDTO> loanedBook=loanService.getLoanedBooks(bookId,pageable);
+
+       return ResponseEntity.ok(loanedBook);
     }
 
 }

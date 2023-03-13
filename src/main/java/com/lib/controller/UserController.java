@@ -66,7 +66,7 @@ public class UserController {
 
         userService.UserCreatedByAdmin(request);
 
-        LibResponse response = new LibResponse(ResponseMessage.USER_CREATED_RESPONSE, true);
+        LibResponse response = new LibResponse(ResponseMessage.USER_CREATED_RESPONSE_MESSAGE, true);
 
         return ResponseEntity.ok(response);
     }

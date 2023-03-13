@@ -27,15 +27,12 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-<<<<<<<<< Temporary merge branch 1
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy HH:mm:ss")
-    private LocalDateTime loanDate=LocalDateTime.now();
+
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy HH:mm:ss")
     @NotNull(message="Please provide expire date of the book")
-=========
     private LocalDateTime loanDate = LocalDateTime.now();
 
->>>>>>>>> Temporary merge branch 2
+
     private LocalDateTime expireDate;
 
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy HH:mm:ss")
@@ -47,22 +44,14 @@ public class Loan {
     @Size(max = 300)
     private String notes;
 
-<<<<<<<<< Temporary merge branch 1
     @ManyToOne
-    @JoinColumn(name = "book_id",referencedColumnName = "id")
-    private Book book;
-    @ManyToOne
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
-    private User user;
-=========
-    @OneToMany
     @JoinColumn(name = "book_id", referencedColumnName = "id")
-    private List<Book> book;
+    private Book book;
 
-    @OneToMany
-    @JoinColumn(name = "ueser_id", referencedColumnName = "id")
-    private List<User> user;
->>>>>>>>> Temporary merge branch 2
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
 
 
 
