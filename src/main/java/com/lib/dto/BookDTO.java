@@ -1,6 +1,7 @@
 package com.lib.dto;
 
 
+import com.lib.domain.Author;
 import com.lib.domain.ImageFile;
 
 
@@ -30,10 +31,10 @@ public class BookDTO {
 
     private Integer pageCount;
 
-    private Long authorId;
-    private Long publisherId;
+    private AuthorDTO authorId;
+    private PublisherDTO publisherId;
     private Integer publishDate;
-    private Long categoryId;
+    private CategoryDTO categoryId;
 
     private Set<String> imageFile;
     private boolean loanable;

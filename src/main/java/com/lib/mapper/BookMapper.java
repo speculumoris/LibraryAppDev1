@@ -21,6 +21,7 @@ public interface BookMapper {
     List<BookDTO> map(List<Book> bookList);
 
 
+    @Mapping(target = "id",ignore = true)
     Book bookRequestToBook(BookRequest bookRequest);
 
 
@@ -31,10 +32,10 @@ public interface BookMapper {
     BookDTO bookToBookDTO(Book book);
 
 
-    @Mapping(source = "categoryId", target = "category", qualifiedByName = "getCategory")
-    @Mapping(source = "publisher", target = "publisher", qualifiedByName = "getPublisher")
-    @Mapping(source = "authorId", target = "author", qualifiedByName = "getAuthor")
-    @Mapping(source = "imageFile", target = "imageFile", qualifiedByName = "getImageAsString")
+    @Mapping(source = "categoryId", target = "category")
+    @Mapping(source = "publisherId", target = "publisher")
+    @Mapping(source = "authorId", target = "author")
+    @Mapping(source = "imageFile", target = "imageFile")
     Book bookDTOToBook(BookDTO bookDTO);
 
 
