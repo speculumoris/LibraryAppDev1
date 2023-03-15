@@ -10,6 +10,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -42,10 +43,10 @@ public class Book {
     @Column(nullable = false)
     private Integer publishDate;
 
-    @Pattern(regexp = "^\\s{2}-\\d{3}$")
+
     @OneToMany(orphanRemoval = true)
-    @JoinColumn(name = "book__id")
-    private List<ImageFile> imageFile;
+    @JoinColumn(name = "book_id")
+    private Set<ImageFile> imageFile;
 
 
     @NotNull(message = "ShelfCode cannot be null")

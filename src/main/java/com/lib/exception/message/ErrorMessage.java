@@ -44,6 +44,6 @@ public class ErrorMessage {
     public final static String NOT_PERMITTED_METHOD_MESSAGE = "You don't have any permission to this data";
     public final static String JWTTOKEN_ERROR_MESSAGE = "JWT Token Validation Error : %s";
     public final static String IMAGE_NOT_FOUND_MESSAGE = "Image with id : %s not found";
-
+    public final static String EXCEL_REPORT_ERROR_MESAGE = "Error occured while gererating excel report";
     public final static String UNAUTHRIZED_FOUND_MESSAGE = "You are not authorized to delete this user ";
 }

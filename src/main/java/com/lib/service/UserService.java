@@ -391,6 +391,9 @@ public class UserService {
     }
 
 
+    public Long getAllUserCount() {
+       return (long) userRepository.findAll().size();
+    }
 
 
 }
